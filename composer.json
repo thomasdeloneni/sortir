@@ -9,6 +9,7 @@
         "ext-iconv": "*",
         "doctrine/annotations": "^2.0",
         "doctrine/doctrine-migrations-bundle": "^3.3",
+        "fakerphp/faker": "^1.23",
         "symfony/apache-pack": "*",
         "symfony/asset": "6.4.*",
         "symfony/console": "6.4.*",
