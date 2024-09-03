@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfileController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper profil">
+    <h1>{{participant.pseudo}}</h1>
+
+    <ul>
+        <li>
+            <p>Prénom:</p>
+            <div>{{participant.prenom}}</div>
+        </li>
+        <li>
+            <p>Nom:</p>
+            <div>{{participant.nom}}</div>
+        </li>
+        <li>
+            <p>Téléphone:</p>
+            <div>{{participant.telephone}}</div>
+        </li>
+        <li>
+            <p>Email:</p>
+            <div>{{participant.mail}}</div>
+        </li>
+        {# <li><p>Campus:</p><div>{{participant.campus}}</div></li> #}
+    </ul>
+
+    <div class="profilBtn">
+        <a href="{{ path('app_main') }}" title="Accueil">Retour</a>
+        <a href="{{ path('app_profile_update') }}" title="Modifier le profile">Modifier le profile</a>
+    </div>
+</div>
+{% endblock %}

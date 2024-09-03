@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ProfileController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper profilUpdate">
+    <h1>Mon Profil</h1>
+
+   {{ form_start(profilForm) }}<br>
+        {{ form_row(profilForm.pseudo) }}<br>
+        {{ form_row(profilForm.prenom) }}<br>
+        {{ form_row(profilForm.nom) }}<br>
+        {{ form_row(profilForm.telephone) }}<br>
+        {{form_row(profilForm.mail)}}<br>
+        {{ form_row(profilForm.password, {
+            label: 'Password'
+        }) }}
+        {{form_row(profilForm.campus)}}<br>
+
+        <button type="submit" class="btn">Enregistrer</button>
+        <a href="{{ path('app_profile') }}" class="btn" title="Annulation">Annuler</a>
+    {{ form_end(profilForm) }}
+</div>
+{% endblock %}
