@@ -1,0 +1,19 @@
+{% block body %}
+    <hr>
+        {{ form_label(form.nom)}}
+        {{ form_widget(form.nom)}}
+        <br>
+        {{ form_label(form.dateHeureDebut)}}
+        {{ form_widget(form.dateHeureDebut)}}
+        <br>
+        {{ form_label(form.infosSortie)}}
+        {{ form_widget(form.infosSortie)}}
+        <br>
+        {{ form_label(form.dateLimiteInscription)}}
+        {{ form_widget(form.dateLimiteInscription)}}
+        <br>
+        {{ form_label(form.nbInscriptionsMax)}}
+        {{ form_widget(form.nbInscriptionsMax)}}
+        <br>
+     
+{% endblock %}
