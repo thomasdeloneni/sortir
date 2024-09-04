@@ -206,7 +206,9 @@ class Sortie
     public function setOrganisateur(?Participant $organisateur): static
     {
         $this->organisateur = $organisateur;
-
+        if (!$this->participant->contains($organisateur)) {
+            $this->addParticipant($organisateur);
+        }
         return $this;
     }
 }
