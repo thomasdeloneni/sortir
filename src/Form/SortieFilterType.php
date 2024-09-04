@@ -30,12 +30,14 @@ class SortieFilterType extends AbstractType
             ->add('startDate', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
-                'label' => 'Start Date',
+                'label' => 'Entre',
+                'data' => null,
             ])
             ->add('endDate', DateType::class, [
                 'required' => false,
                 'widget' => 'single_text',
-                'label' => 'End Date',
+                'label' => 'et',
+                'data' => null,
             ])
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,

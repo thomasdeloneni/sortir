@@ -1,29 +1,41 @@
 {% extends 'base.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href={{ asset('styles/accueil.css') }}>
+{% endblock %}
+
 
 {% block body %}
 
 <div class="container">
-
     <div class="infos">
         <p>Date : {{ "now"|date("d/m/Y") }}</p>
         <p>Participant : {{app.user.nom}} {{app.user.prenom}}<p>
     </div>
-    <div>
-    <h1>Filtrer les sorties</h1>
-    </div>
+    <div class="formSearch">
+        <div>
+        <h1>Filtrer les sorties</h1>
     {{ form_start(form) }}
+            {{ form_row(form.campus) }}
         {{ form_row(form.nom) }}
         {{ form_row(form.startDate) }}
         {{ form_row(form.endDate) }}
-        {{ form_row(form.campus) }}
-        {{  form_row(form.isOrganizer) }}
-        {{  form_row(form.isInscrit) }}
-        {{  form_row(form.isNotInscrit) }}
-        {{  form_row(form.isFinished) }}
-        <button type="submit">Rechercher</button>
+        </div>
+        <div>
+        {{ form_row(form.isOrganizer) }}
+        {{ form_row(form.isInscrit) }}
+        {{ form_row(form.isNotInscrit) }}
+        {{ form_row(form.isFinished) }}
+        </div>
+        <div>
+            <button type="submit">Rechercher</button>
+        </div>
+
     {{ form_end(form) }}
-    <table>
+
+    </div>
+    <div class="tableau">
+    <table >
     <thead>
         <tr>
             <th>Nom de la sortie</th>
@@ -63,5 +75,6 @@
     {% endfor %}
     </tbody>
 </table>
+    </div>
 </div>
 {% endblock %}

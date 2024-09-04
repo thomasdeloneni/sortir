@@ -53,31 +53,10 @@ footer{
     color: var(--blanc);
 }
 
-table {
-    width: 50%;
-    border-collapse: collapse;
-    margin: 20px 0;
-}
 
-table, th, td {
-    border: 1px solid black;
-}
+
 th, td {
     padding: 10px;
     text-align: center;
     justify-content: center;
 }
-th {
-    background-color: #f2f2f2;
-}
-
-/*.container {*/
-/*    display: flex;*/
-/*    justify-content: center;*/
-/*    align-items: center;*/
-/*    height: 100vh;*/
-/*}*/
-
-/*.infos {*/
-/*    text-align: right;*/
-/*}*/

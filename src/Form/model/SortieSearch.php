@@ -7,19 +7,13 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 class SortieSearch
 {
-
-    /**
-     * @Assert\Length(max=255)
-     */
+    #[Assert\Length(max: 255)]
     private ?string $nom = null;
-    /**
-     * @Assert\DateTime
-     */
+
+    #[Assert\LessThanOrEqual(propertyPath: 'endDate')]
     private ?\DateTimeInterface $startDate = null;
 
-    /**
-     * @Assert\DateTime
-     */
+    #[Assert\GreaterThanOrEqual(propertyPath: 'startDate')]
     private ?\DateTimeInterface $endDate = null;
 
     private ?Campus $campus = null;
