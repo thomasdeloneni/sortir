@@ -13,7 +13,7 @@
         
         {% block stylesheets %}
          {# notre css #}
-            <link rel="stylesheet" href="{{ asset('css/app.css') }}">
+            <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
 
 
         {% endblock %}
@@ -33,8 +33,12 @@
             <h1>Sortir</h1> 
             <nav class="header-nav">
                 <a href="{{ path('app_main') }}" title="Accueil">Accueil</a>
-                <a href="{{ path('app_logout') }}" title="Logout">Se déconnecter</a>       
-                               <a href="{{ path('app_login') }}" title="Logout">connexion</a>   
+                {% if app.user %}
+                <a href="{{ path('app_logout') }}" title="Logout">Se déconnecter</a> 
+                {% endif %}  
+                {% if not app.user %}    
+                <a href="{{ path('app_login') }}" title="Logout">Connexion</a> 
+                {% endif %}  
             </nav>
         </header>
 
