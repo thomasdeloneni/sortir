@@ -6,14 +6,92 @@
         {{ form_label(form.dateHeureDebut)}}
         {{ form_widget(form.dateHeureDebut)}}
         <br>
-        {{ form_label(form.infosSortie)}}
-        {{ form_widget(form.infosSortie)}}
-        <br>
         {{ form_label(form.dateLimiteInscription)}}
         {{ form_widget(form.dateLimiteInscription)}}
         <br>
         {{ form_label(form.nbInscriptionsMax)}}
         {{ form_widget(form.nbInscriptionsMax)}}
         <br>
-     
+        {{ form_label(form.infosSortie)}}
+        {{ form_widget(form.infosSortie)}}
+        <br>
+        {{ form_label(form.campus)}}
+        {{ form_widget(form.campus) }}  
+        <br>  
+        {{ form_label(form.ville)}}
+        {{ form_widget(form.ville) }} 
+        <br>
+        {{ form_label(form.lieu)}}
+        {{ form_widget(form.lieu) }} 
+
+        {# conteneur pour afficher les infos du lieu choisi#}
+        <div id="lieu-info"></div>
+        <button type="submit" class="btn">Register</button>
+
+<script>
+    //obtenir les lieux en fonction de la ville choisie 
+    document.addEventListener('DOMContentLoaded', function() {
+        const villeSelect = document.querySelector('#{{ form.ville.vars.id }}');
+        const lieuSelect = document.querySelector('#{{ form.lieu.vars.id }}');
+
+    villeSelect.addEventListener('change', function() {
+        const villeId = this.value;
+        console.log(this.value)
+
+        // Réinitialiser le champ lieu et infos 
+        lieuSelect.innerHTML = '<option value="">Choisissez un lieu</option>';
+        document.getElementById('lieu-info').innerHTML = '';
+    
+        if (villeId) {
+            // Appel AJAX pour récupérer les lieux de la ville sélectionnée
+            const baseUrl = `${window.location.origin}/public/api/ville/${villeId}`;
+            fetch(baseUrl)
+                .then(response => response.json())
+                .then(lieux => {
+                    lieux.forEach(lieu => {
+                        const option = document.createElement('option');
+                        option.value = lieu.id;
+                        option.textContent = lieu.nom;
+                        lieuSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erreur lors de la récupération des lieux:', error);
+                });
+        }
+    });
+});
+    // obtenir les informations du lieu choisi
+        document.getElementById('sortie_lieu').addEventListener('change', function () {
+        const lieuId = this.value;
+
+        if (!lieuId) {
+            document.getElementById('lieu-info').innerHTML = '';
+            return;
+        }
+
+        const baseUrl = `${window.location.origin}/public/api/lieu/${lieuId}`;
+
+        fetch(baseUrl)
+            .then(response => {
+                 console.log('Statut de la réponse :', response.status);
+                if (!response.ok) {
+                    throw new Error('Erreur lors de la récupération des données du lieu, pas cool ça :()');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('lieu-info').innerHTML = `
+                    <p><strong>Nom :</strong> ${data.rue}</p>
+                    <p><strong>Latitude :</strong> ${data.latitude}</p>
+                    <p><strong>Longitude :</strong> ${data.longitude}</p>
+                `;
+            })
+            .catch(error => {
+                console.error('Erreur :', error);
+                document.getElementById('lieu-info').innerHTML = `<p>Erreur lors de la récupération des informations du lieu.</p>`;
+            });
+    });
+</script>
+
 {% endblock %}

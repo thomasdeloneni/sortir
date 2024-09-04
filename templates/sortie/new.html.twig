@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Sortie{% endblock %}
-
 {% block body %}
-    <h1>Create new Sortie</h1>
+    <h1>Créer une sortie</h1>
 
     {{ include('sortie/_form.html.twig') }}
 
-    <a href="{{ path('app_sortie_index') }}">back to list</a>
+    <button class="btn">Enregistrer</button>
+    <button class="btn">Publier la sortie</button>
+    <button class="btn">Annuler</button>
 {% endblock %}

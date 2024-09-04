@@ -22,12 +22,13 @@ final class SortieController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_sortie_new', methods: ['GET', 'POST'])]
+    #[Route('/new', name: 'app_sortie_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
+        $userEnCours = $this->getUser();
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($sortie);
@@ -39,6 +40,7 @@ final class SortieController extends AbstractController
         return $this->render('sortie/new.html.twig', [
             'sortie' => $sortie,
             'form' => $form->createView(),
+            'userEnCours' => $userEnCours,
         ]);
     }
     
