@@ -11,24 +11,35 @@
 <div class="example-wrapper profil">
     <h1>{{participant.pseudo}}</h1>
 
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
     <ul>
         <li>
-            <p>Prénom:</p>
+            <p class="profilP">Prénom:</p>
             <div>{{participant.prenom}}</div>
         </li>
         <li>
-            <p>Nom:</p>
+            <p class="profilP">Nom:</p>
             <div>{{participant.nom}}</div>
         </li>
         <li>
-            <p>Téléphone:</p>
+            <p class="profilP">Téléphone:</p>
             <div>{{participant.telephone}}</div>
         </li>
         <li>
-            <p>Email:</p>
+            <p class="profilP">Email:</p>
             <div>{{participant.mail}}</div>
         </li>
-        {# <li><p>Campus:</p><div>{{participant.campus}}</div></li> #}
+        <li>
+            <p class="profilP">Campus:</p>
+            <div>{{participant.campus.nom}}</div>
+        </li>
     </ul>
 
     <div class="profilBtn">

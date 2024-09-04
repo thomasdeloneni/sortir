@@ -6,6 +6,7 @@ Couleurs
 } */
 
 *{
+    box-sizing: border-box;
     margin: 0;
 }
 
@@ -14,11 +15,12 @@ body{
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin: 0;
 }
 
 header{
     display: flex;
-    height: 8rem;
+    height: 10rem;
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
@@ -53,15 +55,36 @@ footer{
     color: #FFF;
 }
 
+.profil{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.profil ul{
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
 .profil h1{
     text-align: center;
 }
 
 .profil li{
-    width: 100%;
-    display: flex;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     align-items: center;
+    column-gap: 3rem;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.profilP{
+    width: 11rem;
 }
 
 .profil .profilBtn{

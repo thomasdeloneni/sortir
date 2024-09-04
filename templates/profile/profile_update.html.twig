@@ -16,11 +16,9 @@
         {{ form_row(profilForm.prenom) }}<br>
         {{ form_row(profilForm.nom) }}<br>
         {{ form_row(profilForm.telephone) }}<br>
-        {{form_row(profilForm.mail)}}<br>
-        {{ form_row(profilForm.password, {
-            label: 'Password'
-        }) }}
-        {{form_row(profilForm.campus)}}<br>
+        {{ form_row(profilForm.mail) }}<br>
+        {{ form_row(profilForm.password) }}<br>
+        {{ form_row(profilForm.campus) }}<br>
 
         <button type="submit" class="btn">Enregistrer</button>
         <a href="{{ path('app_profile') }}" class="btn" title="Annulation">Annuler</a>
