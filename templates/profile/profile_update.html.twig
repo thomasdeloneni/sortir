@@ -17,7 +17,8 @@
         {{ form_row(profilForm.nom) }}<br>
         {{ form_row(profilForm.telephone) }}<br>
         {{ form_row(profilForm.mail) }}<br>
-        {{ form_row(profilForm.password) }}<br>
+        {{ form_row(profilForm.password.first) }}<br>
+        {{ form_row(profilForm.password.second) }}<br>
         {{ form_row(profilForm.campus) }}<br>
 
         <button type="submit" class="btn">Enregistrer</button>
