@@ -31,7 +31,7 @@ class MainController extends AbstractController
         $pagination = $paginator->paginate(
             $queryBuilder,
             $request->query->getInt('page', 1),
-            10
+            20
         );
 
         return $this->render('main/home.html.twig', [
