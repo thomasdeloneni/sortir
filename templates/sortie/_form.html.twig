@@ -28,7 +28,7 @@
             {{ form_widget(form.infosSortie)}}
             <br>
         </div>
-        <div class="localisation"
+        <div class="localisation">
             {{ form_label(form.campus)}}
             {{ form_widget(form.campus) }}
             <br>
@@ -42,7 +42,7 @@
             {# conteneur pour afficher les infos du lieu  par l'utilisateur #}
             <div id="lieu-info"></div>
             {{form_end(form)}}
-        <button type="button"><a href="{{ path('app_sortie_index') }}" class="annuler">Annuler</a></button>
+            <button type="button"><a href="{{ path('app_sortie_index') }}" class="annuler">Annuler</a></button>
         </div>
     </div>
 
