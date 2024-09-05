@@ -19,32 +19,44 @@
         {% endfor %}
     {% endfor %}
 
-    <ul>
-        <li>
-            <p class="profilP">Prénom:</p>
-            <div>{{participant.prenom}}</div>
-        </li>
-        <li>
-            <p class="profilP">Nom:</p>
-            <div>{{participant.nom}}</div>
-        </li>
-        <li>
-            <p class="profilP">Téléphone:</p>
-            <div>{{participant.telephone}}</div>
-        </li>
-        <li>
-            <p class="profilP">Email:</p>
-            <div>{{participant.mail}}</div>
-        </li>
-        <li>
-            <p class="profilP">Campus:</p>
-            <div>{{participant.campus.nom}}</div>
-        </li>
-    </ul>
+    <div class="prodil-info">
+        <div class="profil-image">
+            {% if participant.imageFilename %}
+                <img src="{{ asset('uploads/images/' ~ participant.imageFilename) }}" alt="Image de profil">
+            {% else %}
+                <p>Aucune image de profil disponible.</p>
+            {% endif %}
+        </div>
+        <div class="profil-text">
+            <ul>
+                <li>
+                    <p class="profilP">Prénom:</p>
+                    <div class="profilT">{{participant.prenom}}</div>
+                </li>
+                <li>
+                    <p class="profilP">Nom:</p>
+                    <div class="profilT">{{participant.nom}}</div>
+                </li>
+                <li>
+                    <p class="profilP">Téléphone:</p>
+                    <div class="profilT">{{participant.telephone}}</div>
+                </li>
+                <li>
+                    <p class="profilP">Email:</p>
+                    <div class="profilT">{{participant.mail}}</div>
+                </li>
+                <li>
+                    <p class="profilP">Campus:</p>
+                    <div class="profilT">{{participant.campus.nom}}</div>
+                </li>
+            </ul>
+        </div>
+
+    </div>
 
     <div class="profilBtn">
         <a href="{{ path('app_main') }}" title="Accueil">Retour</a>
-        <a href="{{ path('app_profile_update') }}" title="Modifier le profile">Modifier le profile</a>
+        <a href="{{ path('app_profile_update') }}" title="Modifier le profil">Modifier le profil</a>
     </div>
 </div>
 {% endblock %}

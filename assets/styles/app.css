@@ -87,7 +87,10 @@ footer{
 }
 
 .profilP{
-    width: 11rem;
+    width: 7rem;
+    font-weight: 700;
+    font-size: 1.1em;
+    text-transform: uppercase;
 }
 
 .profil .profilBtn{
@@ -122,4 +125,28 @@ footer{
 .profilUpdate .btn:hover{
     color: #180344;
     background-color: #ffce00;
+}
+
+.prodil-info{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+    padding: 2rem;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 255, .2);
+    margin-bottom: 4rem;
+}
+
+.profil-image{
+    border-right: 1px solid #333;
+    padding-right: 5rem;
+}
+
+.profil-text ul{
+    width: 100% !important;
+}
+
+.profil-text ul li{
+    grid-template-columns: 0.3fr 1fr !important;
 }
