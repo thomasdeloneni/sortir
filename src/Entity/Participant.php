@@ -9,6 +9,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Rollerworks\Component\PasswordStrength\Validator\Constraints as RollerworksPassword;
 
 #[ORM\Entity(repositoryClass: ParticipantRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_PSEUDO', fields: ['pseudo'])]
@@ -21,6 +23,8 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\NotBlank(message: "Veuillez renseigner un pseudo")]
+    #[Assert\Length(min: 2, max: 50, minMessage: "Minimum 2 characters", maxMessage: "Maximum 50 characters")]
     private ?string $pseudo = null;
 
     /**
@@ -36,15 +40,21 @@ class Participant implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Veuillez renseigner un nom")]
+    #[Assert\Length(min: 2, max: 50, minMessage: "Minimum 2 characters", maxMessage: "Maximum 50 characters")]
     private ?string $nom = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Veuillez renseigner un prénom")]
+    #[Assert\Length(min: 2, max: 50, minMessage: "Minimum 2 characters", maxMessage: "Maximum 50 characters")]
     private ?string $prenom = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $telephone = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank(message: "Veuillez renseigner un email")]
+    #[Assert\Email(message: "Veuillez renseigner un email")]
     private ?string $mail = null;
 
     #[ORM\ManyToOne(inversedBy: 'participants')]
