@@ -1,0 +1,80 @@
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 600px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.list {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    font-size: 20px;
+}
+
+button {
+    color: #ffce00;
+    background-color: #180344;
+    padding: 0.2rem 1.5rem;
+    text-decoration: none;
+    margin-right: 1rem;
+    border-radius: 10px;
+    width: 200px;
+}
+
+button:hover{
+    color: #180344;
+    background-color: #ffce00;
+}
+
+.annuler{
+    text-decoration: none;
+    color: #ffce00;
+}
+.columns {
+    display: flex;
+    gap: 20px;
+    width: 100%;
+}
+
+
+.informations,
+.localisation {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+
+.informations label,
+.localisation label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.informations input,
+.localisation input,
+.informations select,
+.localisation select,
+.informations textarea,
+.localisation textarea {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#lieu-info {
+    margin-top: 20px;
+    padding: 10px;
+    border: 1px dashed #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}

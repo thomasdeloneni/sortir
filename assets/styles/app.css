@@ -1,35 +1,45 @@
-/* Couleurs */
-:root {
+Couleurs
+/* :root {
     --jaune-sortir: #ffce00;
     --violet-sortir: #180344;
     --blanc: #FFFFFF;
-}
+} */
 
 *{
     margin: 0;
 }
 
 body{
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    margin: 0;
+    /* font-family: "SUSE", sans-serif; */
+    font-optical-sizing: auto;
+    /* font-style: normal; */
+}
+
+h1{
+    display: flex;
+    justify-content: center;
+    margin: 20px;
 }
 
 header{
     display: flex;
-    height: 8rem;
+    height: 10rem;
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
-    background-color: var(--violet-sortir);
-    color: var(--blanc);
+    background-color: #180344;
+    color: #FFF;
+
 }
 
 header a,
 header a:focus,
 header a:active{
-    color: var(--blanc); 
+    color: #FFF; 
 }
 
 .header-logo{
@@ -49,14 +59,72 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: var(--violet-sortir);
-    color: var(--blanc);
+    background-color: #180344;
+    color: #FFF;
 }
 
-
-
-th, td {
-    padding: 10px;
-    text-align: center;
+.profil{
+    display: flex;
+    flex-direction: column;
     justify-content: center;
+    align-items: center;
+}
+
+.profil ul{
+    display: flex;
+    width: 50%;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.profil h1{
+    text-align: center;
+}
+
+.profil li{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    column-gap: 3rem;
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.profilP{
+    width: 11rem;
+}
+
+.profil .profilBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profil .profilBtn a{
+    color: #ffce00;
+    background-color: #180344;
+    padding: 0.2rem 1.5rem;
+    text-decoration: none;
+    margin-right: 1rem;
+    border-radius: 10px;
+}
+
+.profil .profilBtn a:hover{
+    color: #180344;
+    background-color: #ffce00;
+}
+
+.profilUpdate .btn{
+    color: #ffce00;
+    background-color: #180344;
+    padding: 0.2rem 1.5rem;
+    text-decoration: none;
+    margin-right: 1rem;
+    border-radius: 10px;
+}
+
+.profilUpdate .btn:hover{
+    color: #180344;
+    background-color: #ffce00;
 }
