@@ -8,6 +8,23 @@
 
 
 {% block body %}
+    {% for message in app.flashes('success') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('danger') %}
+        <div class="alert alert-danger">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-info">
+            {{ message }}
+        </div>
+    {% endfor %}
 
 <div class="container">
     <div class="infos">
@@ -64,14 +81,24 @@
             <td></td>
             {% endif %}
             <td>{{sortie.organisateur.prenom}} {{sortie.organisateur.nom}}</td>
-            {# <td>
-                <a href="{{ path('aapp_sortie_show', {'id': sortie.id}) }}">Détails</a>
-                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>
+             <td>
+{#                <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Détails</a>#}
+{#                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>#}
                 {% if sortie.organisateur == app.user %}
-                    <a href="{{ path('app_sortie_delete', {'id': sortie.id}) }}">Annuler</a>
+                    <a href="">Annuler</a>
                 {% endif %}
-                <a href="{{ path('app_sortie_inscription', {'id': sortie.id}) }}">S'inscrire</a>
-            </td> #}
+                 {% if sortie.nbInscriptionsMax > sortie.participant|length and sortie.etat.libelle == "Ouverte" and not sortie.participant.contains(app.user) %}
+                     <a href="{{ path('app_sortie_inscrire', {'id': sortie.id}) }}">S'inscrire</a>
+                 {% endif %}
+                {% if  sortie.nbInscriptionsMax == sortie.participant|length %}
+                     <span>Complet</span>
+                    {% endif %}
+                 {% if sortie.participant.contains(app.user) and sortie.etat.libelle == "Ouverte" %}
+                     <a href="{{ path('app_sortie_desinscrire', {'id': sortie.id}) }}">Se désinscrire</a>
+                 {% endif %}
+
+
+            </td>
         </tr>
        
     {% endfor %}
@@ -82,4 +109,19 @@
         {{ knp_pagination_render(pagination) }}
     </div>
 </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(function(alert) {
+                setTimeout(function() {
+                    alert.style.transition = "opacity 0.5s ease-out";
+                    alert.style.opacity = "0";
+                    setTimeout(function() {
+                        alert.remove();
+                    }, 500);
+                }, 2000);
+            });
+        });
+    </script>
 {% endblock %}
+

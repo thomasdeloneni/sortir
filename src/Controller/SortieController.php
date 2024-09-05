@@ -3,11 +3,13 @@
 namespace App\Controller;
 
 use App\Entity\Etat;
+use App\Entity\Participant;
 use App\Entity\Sortie;
 use App\Form\SortieType;
 use App\Repository\SortieRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -51,5 +53,69 @@ final class SortieController extends AbstractController
             'form' => $form->createView(),
             'userEnCours' => $userEnCours,
         ]);
+    }
+
+    #[Route('/{id}/inscrire', name: 'app_sortie_inscrire')]
+    public function inscrire(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager): Response
+    {
+        $sortie = $sortieRepository->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée');
+        }
+
+        if (count($sortie->getParticipant()) >= $sortie->getNbInscriptionsMax()) {
+            $this->addFlash('danger', 'Le nombre maximum de participants a été atteint.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            $this->addFlash('danger', 'Utilisateur non valide.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        if (!$sortie->getParticipant()->contains($user)) {
+            $sortie->addParticipant($user);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Vous êtes bien inscrit à la sortie.');
+        } else {
+            $this->addFlash('info', 'Vous êtes déjà inscrit à cette sortie.');
+        }
+
+        return $this->redirectToRoute('app_main');
+    }
+
+    #[Route('/{id}/desinscrire', name: 'app_sortie_desinscrire')]
+    public function desinscrire(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Security $security): Response
+    {
+
+        $sortie = $sortieRepository->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée');
+        }
+
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            $this->addFlash('danger', 'Utilisateur non valide.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        if ($sortie->getParticipant()->contains($user)) {
+            $sortie->removeParticipant($user);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Vous vous êtes désinscrit de la sortie.');
+        } else {
+            $this->addFlash('danger', 'Vous n\'étiez pas inscrit à cette sortie.');
+        }
+
+        return $this->redirectToRoute('app_main');
     }
 }
