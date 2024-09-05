@@ -195,7 +195,9 @@ class Sortie
 
     public function removeParticipant(Participant $participant): static
     {
-        $this->participant->removeElement($participant);
+        if ($this->participant->contains($participant)) {
+            $this->participant->removeElement($participant);
+        }
 
         return $this;
     }
