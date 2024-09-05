@@ -70,4 +70,69 @@ final class SortieController extends AbstractController
             'organisateur' => $organisateur,
         ]);
     }
+
+    #[Route('/{id}/inscrire', name: 'app_sortie_inscrire')]
+    public function inscrire(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager): Response
+    {
+        $sortie = $sortieRepository->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée');
+        }
+
+        if (count($sortie->getParticipant()) >= $sortie->getNbInscriptionsMax()) {
+            $this->addFlash('danger', 'Le nombre maximum de participants a été atteint.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            $this->addFlash('danger', 'Utilisateur non valide.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        if (!$sortie->getParticipant()->contains($user)) {
+            $sortie->addParticipant($user);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Vous êtes bien inscrit à la sortie.');
+        } else {
+            $this->addFlash('info', 'Vous êtes déjà inscrit à cette sortie.');
+        }
+
+        return $this->redirectToRoute('app_main');
+    }
+
+    #[Route('/{id}/desinscrire', name: 'app_sortie_desinscrire')]
+    public function desinscrire(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Security $security): Response
+    {
+
+        $sortie = $sortieRepository->find($id);
+
+        if (!$sortie) {
+            throw $this->createNotFoundException('Sortie non trouvée');
+        }
+
+        $user = $this->getUser();
+
+        if (!$user instanceof Participant) {
+            $this->addFlash('danger', 'Utilisateur non valide.');
+            return $this->redirectToRoute('app_main');
+        }
+
+        if ($sortie->getParticipant()->contains($user)) {
+            $sortie->removeParticipant($user);
+            $entityManager->persist($sortie);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Vous vous êtes désinscrit de la sortie.');
+        } else {
+            $this->addFlash('danger', 'Vous n\'étiez pas inscrit à cette sortie.');
+        }
+
+        return $this->redirectToRoute('app_main');
+    }
+
 }
