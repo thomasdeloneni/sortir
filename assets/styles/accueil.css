@@ -11,8 +11,9 @@
     border-radius: 8px;
     margin-bottom: 20px;
     margin-top: 20px;
-
 }
+
+
 .infos {
     margin-left: auto;
     margin-top: 1rem;
@@ -27,6 +28,19 @@
     width: 100%;
 }
 
+.btnAction a{
+    text-decoration: none;
+    font-weight: bold;
+    color: #d388ee;
+    padding : 0.2rem 1.5rem;
+    margin-top: 3px;
+}
+
+.btnAction a:hover {
+    color: #640593;
+    text-decoration: underline;
+}
+
 .profil .profilBtn a{
     color: #ffce00;
     background-color: #180344;
@@ -39,6 +53,44 @@
 .profil .profilBtn a:hover{
     color: #180344;
     background-color: #ffce00;
+}
+
+.tableau table {
+    border-collapse: separate;
+    border-spacing: 0 10px;
+    width: 100%;
+}
+
+.tableau th, .tableau td {
+    text-align: center;
+    vertical-align: middle;
+}
+
+.tableau tr {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.alert-success {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ffce00;
+    color: #180344;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
+}
+
+.alert-danger {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff0000;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 10px;
+    margin-top: 1rem;
 }
 
 

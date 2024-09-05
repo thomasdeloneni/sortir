@@ -81,7 +81,7 @@
             <td></td>
             {% endif %}
             <td>{{sortie.organisateur.prenom}} {{sortie.organisateur.nom}}</td>
-             <td>
+             <td class="btnAction">
 {#                <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Détails</a>#}
 {#                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>#}
                 {% if sortie.organisateur == app.user %}

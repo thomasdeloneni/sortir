@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class MainController extends AbstractController
 {
     #[Route('/', name: 'app_main')]
-    public function index(Request $request,SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Security $security, PaginatorInterface $paginator): Response
+    public function index(Request $request, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Security $security, PaginatorInterface $paginator): Response
     {
         $search = new SortieSearch();
         $form = $this->createForm(SortieFilterType::class, $search);
