@@ -21,6 +21,12 @@ class SortieRepository extends ServiceEntityRepository
         $this->security = $security;
     }
 
+    public function findAllPaginated()
+    {
+        return $this->createQueryBuilder('s')
+            ->getQuery();
+    }
+
     public function findByFilters(SortieSearch $search)
     {
         $queryBuilder = $this->createQueryBuilder('s')

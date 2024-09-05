@@ -5,6 +5,7 @@
 {% endblock %}
 
 
+
 {% block body %}
 
 <div class="container">
@@ -49,7 +50,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for sortie in sorties %}
+    {% for sortie in pagination %}
         <tr>
             <td>{{sortie.nom}}</td>
             <td>{{sortie.dateHeureDebut|date('d/m/Y')}}</td>
@@ -75,6 +76,9 @@
     {% endfor %}
     </tbody>
 </table>
+    </div>
+    <div class="pagination">
+        {{ knp_pagination_render(pagination) }}
     </div>
 </div>
 {% endblock %}

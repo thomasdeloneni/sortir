@@ -26,3 +26,70 @@
     gap: 1rem;
     width: 100%;
 }
+
+.profil .profilBtn a{
+    color: #ffce00;
+    background-color: #180344;
+    padding: 0.2rem 1.5rem;
+    text-decoration: none;
+    margin-right: 1rem;
+    border-radius: 10px;
+}
+
+.profil .profilBtn a:hover{
+    color: #180344;
+    background-color: #ffce00;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 20px;
+    border-radius: 10px;
+}
+
+.pagination li {
+    display: inline-flex;
+    flex: 1;
+}
+
+.pagination a, .pagination span {
+    color: #ffce00;
+    background-color: #180344;
+    padding: 0.2rem 1.5rem;
+    text-decoration: none;
+    border: 1px solid #180344;
+    flex: 1;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pagination a:not(:last-child), .pagination span:not(:last-child) {
+    border-right: none;
+}
+
+.pagination a:hover {
+    background-color: #ffce00;
+    color: #180344;
+}
+
+.pagination .active span {
+    background-color: #ffce00;
+    color: #180344;
+}
+
+.pagination li:first-child a, .pagination li:first-child span {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.pagination li:last-child a, .pagination li:last-child span {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
