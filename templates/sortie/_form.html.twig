@@ -1,0 +1,112 @@
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href={{ asset('styles/creation.css') }}>
+{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form)}}
+    <hr>
+    <div class="columns">
+        <div class="informations">
+            {{ form_label(form.nom)}}
+            {{ form_widget(form.nom)}}
+            <br>
+            {{ form_label(form.dateHeureDebut)}}
+            {{ form_widget(form.dateHeureDebut)}}
+            <br>
+            {{ form_label(form.dateLimiteInscription)}}
+            {{ form_widget(form.dateLimiteInscription)}}
+            {{ form_errors(form.dateLimiteInscription) }}
+            <br>
+            {{ form_label(form.nbInscriptionsMax)}}
+            {{ form_widget(form.nbInscriptionsMax)}}
+            <br>
+            {{ form_label(form.duree)}}
+            {{ form_widget(form.duree) }}
+            <br>
+            {{ form_label(form.infosSortie)}}
+            {{ form_widget(form.infosSortie)}}
+            <br>
+        </div>
+        <div class="localisation">
+            {{ form_label(form.campus)}}
+            {{ form_widget(form.campus) }}
+            <br>
+            {{ form_label(form.ville)}}
+            {{ form_widget(form.ville) }}
+            <br>
+            {{ form_label(form.lieu)}}
+            {{ form_widget(form.lieu) }}
+            <br>
+
+            {# conteneur pour afficher les infos du lieu  par l'utilisateur #}
+            <div id="lieu-info"></div>
+            {{form_end(form)}}
+            <button type="button"><a href="{{ path('app_sortie_index') }}" class="annuler">Annuler</a></button>
+        </div>
+    </div>
+
+<script>
+    //obtenir les lieux en fonction de la ville choisie 
+    document.addEventListener('DOMContentLoaded', function() {
+        const villeSelect = document.querySelector('#{{ form.ville.vars.id }}');
+        const lieuSelect = document.querySelector('#{{ form.lieu.vars.id }}');
+
+        villeSelect.addEventListener('change', function() {
+            const villeId = this.value;
+
+            // Réinitialiser le champ lieu et les informations
+            lieuSelect.innerHTML = '<option value="">Choisissez un lieu</option>';
+            document.getElementById('lieu-info').innerHTML = '';
+
+            if (villeId) {
+                const baseUrl = `${window.location.origin}/public/api/ville/${villeId}`;
+                fetch(baseUrl)
+                    .then(response => response.json())
+                    .then(lieux => {
+                        lieux.forEach(lieu => {
+                            const option = document.createElement('option');
+                            option.value = lieu.id;
+                            option.textContent = lieu.nom;
+                            lieuSelect.appendChild(option);
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erreur lors de la récupération des lieux:', error);
+                    });
+            }
+        });
+    });
+    // obtenir les informations du lieu choisi
+        document.getElementById('sortie_lieu').addEventListener('change', function () {
+            const lieuId = this.value;
+
+            if (!lieuId) {
+                document.getElementById('lieu-info').innerHTML = '';
+                return;
+            }
+
+            const baseUrl = `${window.location.origin}/public/api/lieu/${lieuId}`;
+
+            fetch(baseUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erreur lors de la récupération des données du lieu, pas cool ça :()');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('lieu-info').innerHTML = `
+                        <p><strong>Nom :</strong> ${data.rue}</p>
+                        <p><strong>Latitude :</strong> ${data.latitude}</p>
+                        <p><strong>Longitude :</strong> ${data.longitude}</p>
+                    `;
+                })
+                .catch(error => {
+                    console.error('Erreur :', error);
+                    document.getElementById('lieu-info').innerHTML = `<p>Erreur lors de la récupération des informations du lieu.</p>`;
+                });
+        });
+</script>
+
+{% endblock %}
