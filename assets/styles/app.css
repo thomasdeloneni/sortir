@@ -6,12 +6,10 @@ Couleurs
 } */
 
 *{
-    box-sizing: border-box;
     margin: 0;
 }
 
 body{
-    height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -19,6 +17,12 @@ body{
     font-family: "SUSE", sans-serif;
     font-optical-sizing: auto;
     font-style: normal;
+}
+
+h1{
+    display: flex;
+    justify-content: center;
+    margin: 20px;
 }
 
 header{

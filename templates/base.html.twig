@@ -41,6 +41,7 @@
                 <a href="{{ path('app_main') }}" title="Accueil">Accueil</a>
                 {% if app.user %}
                 <a href="{{ path('app_logout') }}" title="Logout">Se déconnecter</a>
+                <a href="{{ path('app_profile') }}" title="Profile">Mon profil</a>
                 <a href="{{ path('app_sortie_new') }}" title="new-sortie">Créer une sortie</a>
                 {% endif %}
                 {% if not app.user %}    
