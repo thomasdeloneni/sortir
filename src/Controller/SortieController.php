@@ -52,11 +52,20 @@ final class SortieController extends AbstractController
             'userEnCours' => $userEnCours,
         ]);
     }
+
     #[Route('/{id}', name: 'app_sortie_show')]
     public function sortieDetail(Sortie $sortie): Response
     {
+        $lieu = $sortie->getLieu();
+        $ville = $lieu->getVille();
+        $participants = $sortie->getParticipant();
+        $organisateur = $sortie->getOrganisateur();
+
         return $this->render('sortie/show.html.twig', [
             'sortie' => $sortie,
+            'ville' => $ville,
+            'participants' => $participants,
+            'organisateur' => $organisateur,
         ]);
     }
 }

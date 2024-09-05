@@ -1,46 +1,80 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Sortie{% endblock %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href={{ asset('styles/sorties/affichage.css') }}>
+{% endblock %}
+
+{% block title %}{{ sortie.nom }}{% endblock %}
 
 {% block body %}
-    <h1>Sortie</h1>
-
-    <table class="table">
-        <tbody>
+    <h1>{{ sortie.nom }}</h1>
+    <div class="wrapper">
+        <table class="leftWrapper">
+            <tbody>
             <tr>
-                <th>Id</th>
-                <td>{{ sortie.id }}</td>
-            </tr>
-            <tr>
-                <th>Nom</th>
-                <td>{{ sortie.nom }}</td>
-            </tr>
-            <tr>
-                <th>DateHeureDebut</th>
+                <th>Rendez-vous le 📅:</th>
                 <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>Duree</th>
-                <td>{{ sortie.duree }}</td>
-            </tr>
-            <tr>
-                <th>DateLimiteInscription</th>
+                <th>Inscris-toi avant le :</th>
                 <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d H:i:s') : '' }}</td>
             </tr>
             <tr>
-                <th>NbInscriptionsMax</th>
+                <th>Nombre de places 📢:</th>
                 <td>{{ sortie.nbInscriptionsMax }}</td>
             </tr>
             <tr>
-                <th>InfosSortie</th>
-                <td>{{ sortie.infosSortie }}</td>
+                <th>Durée :</th>
+                <td>{{ sortie.duree }}</td>
             </tr>
-        </tbody>
-    </table>
+            <tr>
+                <th>Description et infos : 💬</th>
+                <td class="description">{{ sortie.infosSortie }}</td>
+            </tr>
+            </tbody>
+        </table>
+        <table class="rightWrapper">
+            <tbody>
+            <tr>
+                <th>Campus :</th>
+                <td>{{ sortie.campus.nom }}</td>
+            </tr>
+            <tr>
+                <th>Lieu : 📍</th>
+                <td>{{ sortie.lieu.nom }}</td>
+            </tr>
+            <tr>
+                <th>Ville :</th>
+                <td>{{ ville.nom }}</td>
+            </tr>
+            <tr>
+                <th>Code Postal :</th>
+                <td>{{ ville.codePostal }}</td>
+            </tr>
+            <tr>
+                <th>Rue :</th>
+                <td>{{ sortie.lieu.rue }}</td>
+            </tr>
+            <tr>
+                <th>Latitude :</th>
+                <td>{{ sortie.lieu.latitude }}</td>
+            </tr>
+            <tr>
+                <th>Longitude :</th>
+                <td>{{ sortie.lieu.longitude }}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class=participant>
+        <h2>Liste des participants : 😍</h2><br>
+        <hr>
+        <br>
+        {% for participant in participants %}
+            <p>{{ participant.nom }}  {{ participant.prenom }}</p>
+        {% endfor %}
+        <h3>Une question ? Besoin de + d'infos ? Tu peux contacter ce super organisateur : {{ organisateur.nom }} 🤠</h3>
+    </div>
+    <a href="{{ path('app_sortie_index') }}" class="list">Retourner sur la liste des sorties</a>
 
-    <a href="{{ path('app_sortie_index') }}">back to list</a>
-
-    <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">edit</a>
-
-    {{ include('sortie/_delete_form.html.twig') }}
 {% endblock %}

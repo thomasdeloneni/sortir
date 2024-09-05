@@ -4,7 +4,7 @@ form {
     align-items: center;
     margin: 0 auto;
     max-width: 600px;
-    padding: 20px;
+    padding: 10px;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -13,7 +13,7 @@ form {
 .list {
     display: flex;
     justify-content: center;
-    margin: 20px;
+    margin: 10px;
     font-size: 20px;
 }
 
@@ -27,15 +27,16 @@ button {
     width: 200px;
 }
 
-button:hover{
+button:hover {
     color: #180344;
     background-color: #ffce00;
 }
 
-.annuler{
+.annuler {
     text-decoration: none;
     color: #ffce00;
 }
+
 .columns {
     display: flex;
     gap: 20px;
