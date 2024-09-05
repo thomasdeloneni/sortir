@@ -2,7 +2,9 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" type="text/css" href={{ asset('styles/accueil.css') }}>
+    <link rel="stylesheet" type="text/css" href={{ asset('styles/pagination.css') }}>
 {% endblock %}
+
 
 
 {% block body %}
@@ -49,7 +51,7 @@
         </tr>
     </thead>
     <tbody>
-    {% for sortie in sorties %}
+    {% for sortie in pagination %}
         <tr>
             <td>{{sortie.nom}}</td>
             <td>{{sortie.dateHeureDebut|date('d/m/Y')}}</td>
@@ -75,6 +77,9 @@
     {% endfor %}
     </tbody>
 </table>
+    </div>
+    <div class="pagination justify-content-center">
+        {{ knp_pagination_render(pagination) }}
     </div>
 </div>
 {% endblock %}
