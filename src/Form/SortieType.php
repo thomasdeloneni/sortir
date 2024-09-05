@@ -8,6 +8,7 @@ use App\Entity\Lieu;
 use App\Entity\Ville;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use Symfony\Component\Form\Button;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -36,10 +37,10 @@ class SortieType extends AbstractType
             ])
             ->add('nbInscriptionsMax')
             ->add('infosSortie', TextareaType::class, ['label' => 'Description et infos'])
-            ->add('etat', EntityType::class, [
-                'class' => Etat::class,
-                'choice_label' => 'libelle',
-            ])
+//            ->add('etat', EntityType::class, [
+//                'class' => Etat::class,
+//                'choice_label' => 'libelle',
+//            ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
                 'choice_label' => 'nom',
@@ -54,16 +55,22 @@ class SortieType extends AbstractType
                 'choice_label' => 'nom',
                 'data' => $this->security->getUser()->getCampus(),
             ])
-            ->add('participant', EntityType::class, [
-                'class' => Participant::class,
-                'choice_label' => 'prenom',
-                'multiple' => true,
+//            ->add('participant', EntityType::class, [
+//                'class' => Participant::class,
+//                'choice_label' => 'prenom',
+//                'multiple' => true,
+//            ])
+//            ->add('organisateur', EntityType::class, [
+//                'class' => Participant::class,
+//                'choice_label' => 'prenom',
+//            ])
+
+            ->add('Enregistrer', SubmitType::class, [
+                'label' => 'Enregistrer',
             ])
-            ->add('organisateur', EntityType::class, [
-                'class' => Participant::class,
-                'choice_label' => 'prenom',
+            ->add('Publier', SubmitType::class, [
+                'label' => 'Publier la sortie',
             ])
-            ->add('Valider', SubmitType::class)
         ;
     }
 
