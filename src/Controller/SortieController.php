@@ -34,7 +34,7 @@ final class SortieController extends AbstractController
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
                 if ($form->get('Enregistrer')->isClicked()) {
-                    $etat = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'Activité en cours']);
+                    $etat = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'En cours']);
                     $sortie->setEtat($etat);
                 } elseif ($form->get('Publier')->isClicked()) {
                     $etat = $entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
@@ -50,6 +50,13 @@ final class SortieController extends AbstractController
             'sortie' => $sortie,
             'form' => $form->createView(),
             'userEnCours' => $userEnCours,
+        ]);
+    }
+    #[Route('/{id}', name: 'app_sortie_show')]
+    public function sortieDetail(Sortie $sortie): Response
+    {
+        return $this->render('sortie/show.html.twig', [
+            'sortie' => $sortie,
         ]);
     }
 }
