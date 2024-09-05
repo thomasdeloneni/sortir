@@ -1,0 +1,58 @@
+.wrapper {
+    display: flex;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+h3 {
+    margin-top: 20px;
+    font-size: 17px;
+    font-weight: 300;
+}
+
+.participant {
+    margin: 0 auto;
+    max-width: 1000px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.description {
+    width: 300px;
+    height: 100px;
+}
+
+.list {
+    display: flex;
+    justify-content: center;
+    margin: 20px;
+    font-size: 20px;
+}
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    padding-bottom: 30px;
+    text-align: left;
+}
+
+.leftWrapper, .rightWrapper {
+    flex: 1;
+    border-collapse: collapse;
+    width: 100%
+}
+
