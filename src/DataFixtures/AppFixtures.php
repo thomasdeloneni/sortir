@@ -15,8 +15,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\Sortie;
 
 class AppFixtures extends Fixture
-
-
 {
     private readonly Generator $faker;
 
@@ -123,13 +121,22 @@ class AppFixtures extends Fixture
             $sortie->setDateHeureDebut($this->faker->dateTimeBetween('now', '+1 year'));
             $sortie->setDuree($this->faker->numberBetween(1, 10) * 60);
             $sortie->setDateLimiteInscription($this->faker->dateTimeBetween('now', '+1 year'));
-            $sortie->setNbInscriptionsMax($this->faker->numberBetween(5, 20));
+            $nbInscriptionsMax = $this->faker->numberBetween(5, 20);
+            $sortie->setNbInscriptionsMax($nbInscriptionsMax);
             $sortie->setInfosSortie($this->faker->text);
             $sortie->setEtat($this->faker->randomElement($etats));
             $sortie->setLieu($this->faker->randomElement($lieux));
             $sortie->setOrganisateur($this->faker->randomElement($participants));
             $sortie->setCampus($this->faker->randomElement($campus));
-            $sortie->addParticipant($this->faker->randomElement($participants));
+            $nbParticipants = $this->faker->numberBetween(1, $nbInscriptionsMax);
+            
+            for ($i = 0; $i < $nbParticipants; $i++) {
+                $participant = $this->faker->randomElement($participants);
+                if (!$sortie->getParticipant()->contains($participant)) {
+                    $sortie->addParticipant($participant);
+                }
+            }
+
             $manager->persist($sortie);
         }
 
