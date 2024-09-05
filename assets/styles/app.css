@@ -1,4 +1,4 @@
-Couleurs
+
 /* :root {
     --jaune-sortir: #ffce00;
     --violet-sortir: #180344;
@@ -7,6 +7,10 @@ Couleurs
 
 *{
     margin: 0;
+}
+
+html, body {
+    height: 100%;
 }
 
 body{
@@ -27,12 +31,13 @@ h1{
 
 header{
     display: flex;
-    height: 10rem;
+    height: 6rem;
     justify-content: space-between;
     align-items: center;
     padding: 0 2rem;
     background-color: #180344;
     color: #FFF;
+
 }
 
 header a,
@@ -49,12 +54,12 @@ header a:active{
     height: 100%;
 }
 
-main{
+main {
     flex: 1;
 }
 
 footer{
-    height: 8rem;
+    height: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;

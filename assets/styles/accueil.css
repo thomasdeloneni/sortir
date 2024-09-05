@@ -1,0 +1,48 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+.tableau {
+    display: block;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+
+}
+.infos {
+    margin-left: auto;
+    margin-top: 1rem;
+}
+
+.formSearch {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    width: 100%;
+}
+
+.profil .profilBtn a{
+    color: #ffce00;
+    background-color: #180344;
+    padding: 0.2rem 1.5rem;
+    text-decoration: none;
+    margin-right: 1rem;
+    border-radius: 10px;
+}
+
+.profil .profilBtn a:hover{
+    color: #180344;
+    background-color: #ffce00;
+}
+
+
+
+
+
+
