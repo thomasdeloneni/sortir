@@ -69,6 +69,7 @@
     </thead>
     <tbody>
     {% for sortie in pagination %}
+        {% if sortie.etat.libelle != "Clôturée" %}
         <tr>
             <td>{{sortie.nom}}</td>
             <td>{{sortie.dateHeureDebut|date('d/m/Y')}}</td>
@@ -100,6 +101,7 @@
 
             </td>
         </tr>
+        {% endif %}
        
     {% endfor %}
     </tbody>
