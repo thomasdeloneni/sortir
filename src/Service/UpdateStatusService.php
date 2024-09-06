@@ -42,6 +42,8 @@ class UpdateStatusService
                 $this->setStateByLibelle($sortie, 'Passée');
             } elseif ($currentDate >= $dateLimiteInscription && $currentDate < $dateDebut) {
                 $this->setStateByLibelle($sortie, 'Clôturée');
+            }elseif (count($sortie->getParticipant()) == $sortie->getNbInscriptionsMax()) {
+                $this->setStateByLibelle($sortie, 'Cloturée');
             }
         }
         $this->entityManager->flush();

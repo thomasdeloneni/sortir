@@ -26,102 +26,103 @@
         </div>
     {% endfor %}
 
-<div class="container">
-    <div class="infos">
-        <p>Date : {{ "now"|date("d/m/Y") }}</p>
-        <p>Participant : {{app.user.nom}} {{app.user.prenom}}<p>
-    </div>
-    <div class="formSearch">
-        <div>
-        <h1>Filtrer les sorties</h1>
-    {{ form_start(form) }}
-            {{ form_row(form.campus) }}
-        {{ form_row(form.nom) }}
-        {{ form_row(form.startDate) }}
-        {{ form_row(form.endDate) }}
+    <div class="container">
+        <div class="infos">
+            <p>Date : {{ "now"|date("d/m/Y") }}</p>
+            <p>Participant : {{ app.user.nom }} {{ app.user.prenom }}<p>
         </div>
-        <div>
-        {{ form_row(form.isOrganizer) }}
-        {{ form_row(form.isInscrit) }}
-        {{ form_row(form.isNotInscrit) }}
-        {{ form_row(form.isFinished) }}
+        <div class="formSearch">
+            <div>
+                <h1>Filtrer les sorties</h1>
+                {{ form_start(form) }}
+                {{ form_row(form.campus) }}
+                {{ form_row(form.nom) }}
+                {{ form_row(form.startDate) }}
+                {{ form_row(form.endDate) }}
+            </div>
+            <div>
+                {{ form_row(form.isOrganizer) }}
+                {{ form_row(form.isInscrit) }}
+                {{ form_row(form.isNotInscrit) }}
+                {{ form_row(form.isFinished) }}
+            </div>
+            <div>
+                <button type="submit">Rechercher</button>
+            </div>
+
+            {{ form_end(form) }}
+
         </div>
-        <div>
-            <button type="submit">Rechercher</button>
+        <div class="tableau">
+            <table>
+                <thead>
+                <tr>
+                    <th>Nom de la sortie</th>
+                    <th>Date de la sortie</th>
+                    <th>Cloture</th>
+                    <th>Inscrits / Places</th>
+                    <th>Etat</th>
+                    <th>Inscrit</th>
+                    <th>Organisateur</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for sortie in pagination %}
+                    {% if sortie.etat.libelle != "Clôturée" %}
+                        <tr>
+                            <td>{{ sortie.nom }}</td>
+                            <td>{{ sortie.dateHeureDebut|date('d/m/Y') }}</td>
+                            <td>{{ sortie.dateLimiteInscription|date('d/m/Y') }}</td>
+
+                            {% if sortie.nbInscriptionsMax == sortie.participant|length %}
+                                <td>Complet</td>
+                            {% else %}
+                                <td>{{ sortie.participant|length }} / {{ sortie.nbInscriptionsMax }}</td>
+                            {% endif %}
+                            <td>{{ sortie.etat.libelle }}</td>
+                            {% if sortie.participant.contains(app.user) %}
+                                <td>X</td>
+                            {% else %}
+                                <td></td>
+                            {% endif %}
+                            <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</td>
+                            <td class="btnAction">
+                                <div class="action-columns">
+                                    {% if sortie.organisateur == app.user or app.user.pseudo == "admin" %}
+                                        <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>
+                                    {% endif %}
+                                    {% if app.user %}
+                                        <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Détails</a>
+                                    {% endif %}
+                                    {% if sortie.nbInscriptionsMax > sortie.participant|length and sortie.etat.libelle == "Ouverte" and not sortie.participant.contains(app.user) %}
+                                        <a href="{{ path('app_sortie_inscrire', {'id': sortie.id}) }}">S'inscrire</a>
+                                    {% endif %}
+                                    {% if sortie.participant.contains(app.user) and sortie.etat.libelle == "Ouverte" %}
+                                        <a href="{{ path('app_sortie_desinscrire', {'id': sortie.id}) }}">Se
+                                            désinscrire</a>
+                                    {% endif %}
+                                </div>
+                            </td>
+                        </tr>
+                    {% endif %}
+
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-
-    {{ form_end(form) }}
-
+        <div class="pagination justify-content-center">
+            {{ knp_pagination_render(pagination) }}
+        </div>
     </div>
-    <div class="tableau">
-    <table >
-    <thead>
-        <tr>
-            <th>Nom de la sortie</th>
-            <th>Date de la sortie</th>
-            <th>Cloture</th>
-            <th>Inscrits / Places</th>
-            <th>Etat</th>
-            <th>Inscrit</th>
-            <th>Organisateur</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for sortie in pagination %}
-        {% if sortie.etat.libelle != "Clôturée" %}
-        <tr>
-            <td>{{sortie.nom}}</td>
-            <td>{{sortie.dateHeureDebut|date('d/m/Y')}}</td>
-            <td>{{sortie.dateLimiteInscription|date('d/m/Y')}}</td>
-            <td>{{sortie.participant|length }} / {{sortie.nbInscriptionsMax}}</td>
-            <td>{{sortie.etat.libelle}}</td>
-            {% if sortie.participant.contains(app.user) %}
-            <td>X</td>
-            {% else %}
-            <td></td>
-            {% endif %}
-            <td>{{sortie.organisateur.prenom}} {{sortie.organisateur.nom}}</td>
-             <td class="btnAction">
-                {% if sortie.organisateur == app.user or app.user.pseudo == "admin" %}
-{#                    <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>#}
-                {% endif %}
-
-                 {% if sortie.nbInscriptionsMax > sortie.participant|length and sortie.etat.libelle == "Ouverte" and not sortie.participant.contains(app.user) %}
-                     <a href="{{ path('app_sortie_inscrire', {'id': sortie.id}) }}">S'inscrire</a>
-                 {% endif %}
-
-                 {% if  sortie.nbInscriptionsMax == sortie.participant|length %}
-                     <span>Complet</span>
-                 {% endif %}
-
-                 {% if sortie.participant.contains(app.user) and sortie.etat.libelle == "Ouverte" %}
-                     <a href="{{ path('app_sortie_desinscrire', {'id': sortie.id}) }}">Se désinscrire</a>
-                 {% endif %}
-
-                 {% if app.user %}
-                        <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Détails</a>
-                 {% endif %}
-            </td>
-        </tr>
-        {% endif %}
-       
-    {% endfor %}
-    </tbody>
-</table>
-    </div>
-    <div class="pagination justify-content-center">
-        {{ knp_pagination_render(pagination) }}
-    </div>
-</div>
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
+        document.addEventListener("DOMContentLoaded", function () {
             const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(function(alert) {
-                setTimeout(function() {
+            alerts.forEach(function (alert) {
+                setTimeout(function () {
                     alert.style.transition = "opacity 0.5s ease-out";
                     alert.style.opacity = "0";
-                    setTimeout(function() {
+                    setTimeout(function () {
                         alert.remove();
                     }, 500);
                 }, 2000);
