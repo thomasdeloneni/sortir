@@ -80,20 +80,19 @@ class SortieRepository extends ServiceEntityRepository
     }
 
 
-    //    /**
-    //     * @return Sortie[] Returns an array of Sortie objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('s')
-    //            ->andWhere('s.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+        /**
+         * @return Sortie[] Returns an array of Sortie objects
+         */
+    public function findAllExceptHistorized(): array
+    {
+        return $this->createQueryBuilder('s')
+            ->leftJoin('s.etat', 'e')
+            ->addSelect('e')
+            ->andWhere('e.libelle != :etat')
+            ->setParameter('etat', 'Historisée')
+            ->getQuery()
+            ->getResult();
+    }
 
     //    public function findOneBySomeField($value): ?Sortie
     //    {

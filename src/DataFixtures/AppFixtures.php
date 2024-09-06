@@ -35,7 +35,7 @@ class AppFixtures extends Fixture
 
     public function addEtats(ObjectManager $manager): void
     {
-        $libelles = ['Créée', 'Ouverte', 'Clôturée', 'En cours', 'Passée', 'Annulée'];
+        $libelles = ['Créée', 'Ouverte', 'Clôturée', 'En cours', 'Passée', 'Annulée', 'Historisée'];
 
             foreach ($libelles as $libelle) {
                 $etat = new Etat();
@@ -118,9 +118,11 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < $number; $i++) {
             $sortie = new Sortie();
             $sortie->setNom($this->faker->sentence(3));
-            $sortie->setDateHeureDebut($this->faker->dateTimeBetween('now', '+1 year'));
+            $dateHeureDebut = $this->faker->dateTimeBetween('now', '+1 year');
+            $dateLimiteInscription = $this->faker->dateTimeBetween('now', $dateHeureDebut);
+            $sortie->setDateHeureDebut($dateHeureDebut);
             $sortie->setDuree($this->faker->numberBetween(1, 10) * 60);
-            $sortie->setDateLimiteInscription($this->faker->dateTimeBetween('now', '+1 year'));
+            $sortie->setDateLimiteInscription($dateLimiteInscription);
             $nbInscriptionsMax = $this->faker->numberBetween(5, 20);
             $sortie->setNbInscriptionsMax($nbInscriptionsMax);
             $sortie->setInfosSortie($this->faker->text);
@@ -129,7 +131,7 @@ class AppFixtures extends Fixture
             $sortie->setOrganisateur($this->faker->randomElement($participants));
             $sortie->setCampus($this->faker->randomElement($campus));
             $nbParticipants = $this->faker->numberBetween(1, $nbInscriptionsMax);
-            
+
             for ($i = 0; $i < $nbParticipants; $i++) {
                 $participant = $this->faker->randomElement($participants);
                 if (!$sortie->getParticipant()->contains($participant)) {
