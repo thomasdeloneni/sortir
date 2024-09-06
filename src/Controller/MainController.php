@@ -20,41 +20,11 @@ class MainController extends AbstractController
     {
     }
 
-//    #[Route('/', name: 'app_main')]
-//    public function index(Request $request, SortieRepository $sortieRepository, PaginatorInterface $paginator): Response
-//    {
-//        $this->updateStatusService->updateStatus();
-//        $search = new SortieSearch();
-//        $form = $this->createForm(SortieFilterType::class, $search);
-//        $form->handleRequest($request);
-//
-//        $queryBuilder = $sortieRepository->createQueryBuilder('s');
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $queryBuilder = $sortieRepository->findByFilters($search);
-//        }
-//
-//        $page = $request->query->getInt('page', 1);
-//        $limit = 20;
-//        $queryBuilder->setMaxResults($limit)
-//            ->setFirstResult(($page - 1) * $limit);
-//
-//        $pagination = $paginator->paginate(
-//            $queryBuilder,
-//            $page,
-//            $limit
-//        );
-//
-//        return $this->render('main/home.html.twig', [
-//            'form' => $form->createView(),
-//            'pagination' => $pagination,
-//        ]);
-//    }
-
     /**
      * @throws \Exception
      */
     #[Route('/', name: 'app_main')]
-    public function index(Request $request, SortieRepository $sortieRepository,PaginatorInterface $paginator): Response
+    public function index(Request $request, SortieRepository $sortieRepository, PaginatorInterface $paginator): Response
     {
         $this->updateStatusService->updateStatus();
         $search = new SortieSearch();
@@ -66,7 +36,9 @@ class MainController extends AbstractController
             ->leftJoin('s.lieu', 'l')->addSelect('l')
             ->leftJoin('s.organisateur', 'o')->addSelect('o')
             ->leftJoin('s.participant', 'p')->addSelect('p')
-            ->leftJoin('s.campus', 'c')->addSelect('c');
+            ->leftJoin('s.campus', 'c')->addSelect('c')
+            ->where('e.libelle != :historisee')
+            ->setParameter('historisee', 'Historisée');
 
         if ($form->isSubmitted() && $form->isValid()) {
             $queryBuilder = $sortieRepository->findByFilters($search);

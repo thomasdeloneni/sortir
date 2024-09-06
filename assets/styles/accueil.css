@@ -93,6 +93,12 @@
     margin-top: 1rem;
 }
 
+.action-columns {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+}
+
 
 
 
