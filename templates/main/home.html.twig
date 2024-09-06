@@ -83,22 +83,25 @@
             {% endif %}
             <td>{{sortie.organisateur.prenom}} {{sortie.organisateur.nom}}</td>
              <td class="btnAction">
-{#                <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Détails</a>#}
-{#                <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>#}
-                {% if sortie.organisateur == app.user %}
-                    <a href="">Annuler</a>
+                {% if sortie.organisateur == app.user or app.user.pseudo == "admin" %}
+{#                    <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>#}
                 {% endif %}
+
                  {% if sortie.nbInscriptionsMax > sortie.participant|length and sortie.etat.libelle == "Ouverte" and not sortie.participant.contains(app.user) %}
                      <a href="{{ path('app_sortie_inscrire', {'id': sortie.id}) }}">S'inscrire</a>
                  {% endif %}
-                {% if  sortie.nbInscriptionsMax == sortie.participant|length %}
+
+                 {% if  sortie.nbInscriptionsMax == sortie.participant|length %}
                      <span>Complet</span>
-                    {% endif %}
+                 {% endif %}
+
                  {% if sortie.participant.contains(app.user) and sortie.etat.libelle == "Ouverte" %}
                      <a href="{{ path('app_sortie_desinscrire', {'id': sortie.id}) }}">Se désinscrire</a>
                  {% endif %}
 
-
+                 {% if app.user %}
+                        <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Détails</a>
+                 {% endif %}
             </td>
         </tr>
         {% endif %}

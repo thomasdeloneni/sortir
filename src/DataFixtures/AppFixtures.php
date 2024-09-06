@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Service\FileUploader;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Etat;
@@ -18,7 +19,7 @@ class AppFixtures extends Fixture
 {
     private readonly Generator $faker;
 
-    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher, FileUploader $fileUploader)
     {
         $this->faker = Factory::create('fr_FR');
     }
@@ -102,6 +103,7 @@ class AppFixtures extends Fixture
             $participant->setNom($this->faker->lastName);
             $participant->setPrenom($this->faker->firstName);
             $participant->setTelephone($this->faker->phoneNumber);
+           // $participant->setImageFilename('public/img/userWho.png');
             $participant->setMail($this->faker->email);
             $participant->setCampus($this->faker->randomElement($campus));
             $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
@@ -156,6 +158,7 @@ class AppFixtures extends Fixture
             $participant->setNom('User');
             $participant->setPrenom('User');
             $participant->setTelephone('0000000000');
+           // $participant->setImageFilename('public/img/userWho.png');
             $participant->setMail('user@example.com');
             $participant->setCampus($manager->getRepository(Campus::class)->findOneBy([]));
             $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
