@@ -9,15 +9,15 @@
 {% block body %}
     <h1>{{ sortie.nom }}</h1>
     <div class="wrapper">
-        <table class="leftWrapper">
+        <table class="left-wrapper">
             <tbody>
             <tr>
                 <th>Rendez-vous le 📅:</th>
-                <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('d-m-Y H:i') : '' }}</td>
             </tr>
             <tr>
                 <th>Inscris-toi avant le :</th>
-                <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ sortie.dateLimiteInscription ? sortie.dateLimiteInscription|date('d-m-Y H:i') : '' }}</td>
             </tr>
             <tr>
                 <th>Nombre de places 📢:</th>
@@ -25,7 +25,7 @@
             </tr>
             <tr>
                 <th>Durée :</th>
-                <td>{{ sortie.duree }}</td>
+                <td>{{ sortie.duree }} minutes</td>
             </tr>
             <tr>
                 <th>Description et infos : 💬</th>
@@ -33,7 +33,7 @@
             </tr>
             </tbody>
         </table>
-        <table class="rightWrapper">
+        <table class="right-wrapper">
             <tbody>
             <tr>
                 <th>Campus :</th>
@@ -75,6 +75,6 @@
         {% endfor %}
         <h3>Une question ? Besoin de + d'infos ? Tu peux contacter ce super organisateur : {{ organisateur.nom }} 🤠</h3>
     </div>
-    <a href="{{ path('app_sortie_index') }}" class="list">Retourner sur la liste des sorties</a>
+    <a href="{{ path('app_main') }}" class="list">Retourner sur la liste des sorties</a>
 
 {% endblock %}

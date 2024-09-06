@@ -1,0 +1,38 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href={{ asset('styles/sorties/affichage.css') }}>
+{% endblock %}
+
+{% block title %}Annuler une sortie{% endblock %}
+
+{% block body %}
+    <h1>Annuler la sortie : {{ sortie.nom }}</h1>
+    <div class="wrapper">
+        <table class="cancel">
+            <tbody>
+            <tr>
+                <th>Nom de la sortie :</th>
+                <td>{{ sortie.nom }}</td>
+            </tr>
+            <tr>
+                <th>Date de la sortie :</th>
+                <td>{{ sortie.dateHeureDebut ? sortie.dateHeureDebut|date('d/m/Y') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Campus :</th>
+                <td>{{ sortie.campus.nom }}</td>
+            </tr>
+            <tr>
+                <th>Lieu :</th>
+                <td>{{ sortie.lieu.nom }} {{ sortie.lieu.rue }} {{ ville.codePostal }} {{ ville.nom }} </td>
+            </tr>
+            </tbody>
+        </table>
+
+        {{ form_start(formCancel) }}
+        {{ form_end(formCancel) }}
+
+        <button type="button" class="annuler-button"><a href="{{ path('app_main') }}" class="annuler">X</a></button>
+    </div>
+{% endblock %}
