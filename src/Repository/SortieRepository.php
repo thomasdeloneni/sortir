@@ -21,17 +21,14 @@ class SortieRepository extends ServiceEntityRepository
         $this->security = $security;
     }
 
-    public function findAllPaginated()
-    {
-        return $this->createQueryBuilder('s')
-            ->getQuery();
-    }
-
     public function findByFilters(SortieSearch $search)
     {
         $queryBuilder = $this->createQueryBuilder('s')
-            ->leftJoin('s.etat', 'e')
-            ->addSelect('e');
+            ->leftJoin('s.etat', 'e')->addSelect('e')
+            ->leftJoin('s.lieu', 'l')->addSelect('l')
+            ->leftJoin('s.organisateur', 'o')->addSelect('o')
+            ->leftJoin('s.participant', 'p')->addSelect('p')
+            ->leftJoin('s.campus', 'c')->addSelect('c');
 
         if ($search->getNom()) {
             $queryBuilder->andWhere('s.nom LIKE :nom')
@@ -79,21 +76,6 @@ class SortieRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
-
-        /**
-         * @return Sortie[] Returns an array of Sortie objects
-         */
-    public function findAllExceptHistorized(): array
-    {
-        return $this->createQueryBuilder('s')
-            ->leftJoin('s.etat', 'e')
-            ->addSelect('e')
-            ->andWhere('e.libelle != :etat')
-            ->setParameter('etat', 'Historisée')
-            ->getQuery()
-            ->getResult();
-    }
-
     //    public function findOneBySomeField($value): ?Sortie
     //    {
     //        return $this->createQueryBuilder('s')
@@ -103,4 +85,5 @@ class SortieRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
 }

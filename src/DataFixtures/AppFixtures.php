@@ -31,11 +31,12 @@ class AppFixtures extends Fixture
         $this->addCampus($manager);
         $this->addParticipants(20, $manager);
         $this->addSorties(20, $manager);
+        $this->addSpecificUser($manager);
     }
 
     public function addEtats(ObjectManager $manager): void
     {
-        $libelles = ['Créée', 'Ouverte', 'Clôturée', 'En cours', 'Passée', 'Annulée', 'Historisée'];
+        $libelles = ['Créée', 'Ouverte', 'Clôturée','En cours', 'Activité en cours', 'Passée', 'Annulée', 'Historisée'];
 
             foreach ($libelles as $libelle) {
                 $etat = new Etat();
@@ -93,6 +94,7 @@ class AppFixtures extends Fixture
 
         $roles = ['ROLE_USER', 'ROLE_ADMIN'];
         $campus = $manager->getRepository(Campus::class)->findAll();
+
         for ($i = 0; $i < $number; $i++) {
             $participant = new Participant();
             $participant->setPseudo($this->faker->userName);
@@ -141,8 +143,25 @@ class AppFixtures extends Fixture
 
             $manager->persist($sortie);
         }
-
         $manager->flush();
+    }
+
+    public function addSpecificUser(ObjectManager $manager): void
+    {
+        $existingUser = $manager->getRepository(Participant::class)->findOneBy(['pseudo' => 'user']);
+        if (!$existingUser) {
+            $participant = new Participant();
+            $participant->setPseudo('admin');
+            $participant->setRoles(['ROLE_ADMIN']);
+            $participant->setNom('User');
+            $participant->setPrenom('User');
+            $participant->setTelephone('0000000000');
+            $participant->setMail('user@example.com');
+            $participant->setCampus($manager->getRepository(Campus::class)->findOneBy([]));
+            $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
+            $manager->persist($participant);
+            $manager->flush();
+        }
     }
 
 }

@@ -50,6 +50,9 @@ class MainController extends AbstractController
 //        ]);
 //    }
 
+    /**
+     * @throws \Exception
+     */
     #[Route('/', name: 'app_main')]
     public function index(Request $request, SortieRepository $sortieRepository,PaginatorInterface $paginator): Response
     {
