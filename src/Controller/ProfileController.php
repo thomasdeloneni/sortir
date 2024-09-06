@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Form\ProfilType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,7 +24,11 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/update', name: 'app_profile_update')]
-    public function profileUpdate(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher): Response
+    public function profileUpdate(
+        Request $request, EntityManagerInterface $em,
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader
+    ): Response
     {
         $participant = $this->getUser();
         $profilForm = $this->createForm(ProfilType::class, $participant);
@@ -37,8 +42,22 @@ class ProfileController extends AbstractController
                 $participant->setPassword($hashedPassword);
             }
 
+            // Gestion du fichier image
+            $imageFile = $profilForm->get('image')->getData();
+            if($imageFile){
+
+                $oldImageFilename = $participant->getImageFilename();
+                if ($oldImageFilename) {
+                    $fileUploader->remove($oldImageFilename);
+                }
+
+                $originalFileName = $fileUploader->upload($imageFile);
+                $participant->setImageFilename($originalFileName);
+            }
+
             $em->persist($participant);
             $em->flush();
+
             $this->addFlash('success', 'Le profil a été mis à jour avec succès.');
             return $this->redirectToRoute('app_profile');
         }

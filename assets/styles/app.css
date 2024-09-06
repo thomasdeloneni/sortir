@@ -96,7 +96,10 @@ footer{
 }
 
 .profilP{
-    width: 11rem;
+    width: 7rem;
+    font-weight: 700;
+    font-size: 1.1em;
+    text-transform: uppercase;
 }
 
 .profil .profilBtn{
@@ -131,4 +134,79 @@ footer{
 .profilUpdate .btn:hover{
     color: #180344;
     background-color: #ffce00;
+}
+
+.profilUpdate form{
+    padding: 2rem;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 255, .2);
+}
+
+.profilUpdate form div:not(.link, .conteneur_left, .conteneur-right){
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.profilUpdate form div.conteneur-right div,
+.profilUpdate form div.conteneur_left div{
+    flex-direction: column;
+}
+
+.profilUpdate form label{
+    width: 80%;
+    padding-bottom: 1rem;
+    font-weight: 600;
+    text-transform: none;
+}
+
+.profilUpdate form div.link{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.profilUpdate form input,
+.profilUpdate form select{
+    width: 80%;
+    height: 1.5rem;
+    border-radius: 5px;
+}
+
+.profilUpdate form .conteneur{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: baseline;
+}
+
+.conteneur_left,
+.conteneur-right,
+.conteneur_left div,
+.conteneur-right div{
+    width: 100%;
+}
+
+.prodil-info{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5rem;
+    padding: 2rem;
+    box-shadow: 0px 10px 15px -3px rgba(0, 0, 255, .2);
+    margin-bottom: 4rem;
+}
+
+.profil-image{
+    border-right: 1px solid #333;
+    padding-right: 5rem;
+}
+
+.profil-text ul{
+    width: 100% !important;
+}
+
+.profil-text ul li{
+    grid-template-columns: 0.3fr 1fr !important;
 }
