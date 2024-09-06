@@ -3,16 +3,14 @@
 namespace App\Controller;
 
 use App\Form\ProfilType;
+use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 class ProfileController extends AbstractController
 {
@@ -26,7 +24,11 @@ class ProfileController extends AbstractController
     }
 
     #[Route('/profile/update', name: 'app_profile_update')]
-    public function profileUpdate(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, SluggerInterface $slugger, #[Autowire('%kernel.project_dir%/public/uploads/images')] string $imageDirectory): Response
+    public function profileUpdate(
+        Request $request, EntityManagerInterface $em,
+        UserPasswordHasherInterface $passwordHasher,
+        FileUploader $fileUploader
+    ): Response
     {
         $participant = $this->getUser();
         $profilForm = $this->createForm(ProfilType::class, $participant);
@@ -42,18 +44,15 @@ class ProfileController extends AbstractController
 
             // Gestion du fichier image
             $imageFile = $profilForm->get('image')->getData();
-
             if($imageFile){
-                $originalFilename = pathinfo($imageFile->getClientOriginalName(), PATHINFO_FILENAME);
-                $safeFilename = $slugger->slug($originalFilename);
-                $newFilename = $safeFilename.'-'.uniqid().'.'.$imageFile->guessExtension();
 
-                try {
-                    $imageFile->move($imageDirectory, $newFilename);
-                } catch (FileException $e){
-
+                $oldImageFilename = $participant->getImageFilename();
+                if ($oldImageFilename) {
+                    $fileUploader->remove($oldImageFilename);
                 }
-                $participant->setImageFilename($newFilename);
+
+                $originalFileName = $fileUploader->upload($imageFile);
+                $participant->setImageFilename($originalFileName);
             }
 
             $em->persist($participant);
