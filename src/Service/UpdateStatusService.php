@@ -25,6 +25,12 @@ class UpdateStatusService
     public function updateStatus(): void
     {
         $sorties = $this->sortieRepository->findAll();
+        $etats = $this->etatRepository->findAll();
+        $etatLibelles = [];
+        foreach ($etats as $etat) {
+            $etatLibelles[$etat->getLibelle()] = $etat;
+        }
+
         foreach ($sorties as $sortie) {
             $currentDate = new \DateTime();
             $dateLimiteInscription = $sortie->getDateLimiteInscription();
@@ -34,24 +40,22 @@ class UpdateStatusService
             $dateIn1Month = clone $dateDebut;
             $dateIn1Month->modify('+1 month');
 
-            if ($currentDate > $dateIn1Month) {
-                $this->setStateByLibelle($sortie, 'Historisée');
+            if ($currentDate > $dateIn1Month && $sortie->getEtat()->getLibelle() != 'Historisée') {
+                $this->setStateByLibelle($sortie, 'Historisée', $etatLibelles);
             } elseif ($currentDate >= $dateDebut && $currentDate <= $dateFin) {
-                $this->setStateByLibelle($sortie, 'Activité en cours');
+                $this->setStateByLibelle($sortie, 'Activité en cours', $etatLibelles);
             } elseif ($currentDate > $dateFin) {
-                $this->setStateByLibelle($sortie, 'Passée');
+                $this->setStateByLibelle($sortie, 'Passée', $etatLibelles);
             } elseif ($currentDate >= $dateLimiteInscription && $currentDate < $dateDebut) {
-                $this->setStateByLibelle($sortie, 'Clôturée');
-            }elseif (count($sortie->getParticipant()) == $sortie->getNbInscriptionsMax()) {
-                $this->setStateByLibelle($sortie, 'Cloturée');
+                $this->setStateByLibelle($sortie, 'Clôturée', $etatLibelles);
             }
         }
         $this->entityManager->flush();
     }
 
-    public function setStateByLibelle(Sortie $sortie, string $libelle): void
+    public function setStateByLibelle(Sortie $sortie, string $libelle, array $etatLibelles): void
     {
-        $etat = $this->etatRepository->findOneBy(['libelle' => $libelle]);
+        $etat = $etatLibelles[$libelle];
         $sortie->setEtat($etat);
         $this->entityManager->persist($sortie);
     }
