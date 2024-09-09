@@ -5,11 +5,13 @@ namespace App\Controller;
 use App\Entity\Participant;
 use App\Form\ProfilType;
 use App\Repository\ParticipantRepository;
+use App\Repository\SortieRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
@@ -78,49 +80,57 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/user/view/delete/{id}', name: 'admin_user_view_delete')]
-    public function viewUserDelete(
-        int $id,
-        FileUploader $fileUploader,
-        ParticipantRepository $participantRepository,
-        EntityManagerInterface $em
-    ): Response
-    {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+//    #[Route('/admin/user/view/delete/{id}', name: 'admin_user_view_delete')]
+//    public function viewUserDelete(
+//        int $id,
+//        FileUploader $fileUploader,
+//        ParticipantRepository $participantRepository,
+//        SortieRepository $sortieRepository,
+//        EntityManagerInterface $em,
+//        RequestStack $requestStack,
+//        Security $security
+//    ): Response {
+//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+//
+//        // Récupérez l'utilisateur connecté
+//        $currentUser = $this->getUser();
+//        if (!$currentUser || !$currentUser->getId()) {
+//            throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
+//        }
+//
+//        $user = $participantRepository->find($id);
+//
+//        // Vérifiez si l'utilisateur existe
+//        if (!$user) {
+//            throw $this->createNotFoundException('Participant non trouvé.');
+//        }
+//
+//        // Suppression des fichiers associés
+//        $oldPictures = $user->getImageFilename();
+//        if ($oldPictures) {
+//            $fileUploader->remove($oldPictures);
+//        }
+//
+//        // Récupérer les sorties organisées par cet utilisateur et les dissocier
+//        $organisateurSorties = $sortieRepository->findBy(['organisateur' => $user->getId()]);
+//        foreach ($organisateurSorties as $sortie) {
+//            $sortie->setOrganisateur(NULL);
+//            $em->persist($sortie);
+//        }
+//
+//        // Suppression de l'utilisateur
+//        $em->remove($user);
+//        $em->flush();
+//
+//        // Si l'utilisateur supprimé est celui connecté, on force une déconnexion
+//        if ($currentUser && $currentUser->getId() === $id) {
+//            // Invalider la session
+//            $requestStack->getSession()->invalidate();
+//            // Déconnecter l'utilisateur
+//            return $this->redirectToRoute('app_logout');
+//        }
+//
+//        return $this->redirectToRoute('admin_user_view');
+//    }
 
-        // Récupérez l'utilisateur connecté
-        $currentUser = $this->getUser();
-        if (!$currentUser || !$currentUser->getId()) {
-            throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
-        }
-
-        $user = $participantRepository->find($id);
-
-        // Vérifiez si l'utilisateur existe
-        if (!$user) {
-            throw $this->createNotFoundException('Participant not found');
-        }
-
-        $oldPictures = $user->getImageFilename();
-        $userSessionId = $currentUser->getId();
-
-        // Supprimez l'image si elle existe
-        if ($oldPictures) {
-            $fileUploader->remove($oldPictures);
-        }
-
-        // Supprimez l'utilisateur
-        $em->remove($user);
-        $em->flush();
-
-        // Redirection en fonction de l'utilisateur supprimé
-        if ($user->getId() === $userSessionId) {
-            // L'utilisateur supprimé est le même que l'utilisateur connecté
-            // Redirigez vers une autre page appropriée
-            return $this->redirectToRoute('app_login'); // Modifier cette route en fonction de vos besoins
-        } else {
-            // Redirection vers la page de connexion si l'utilisateur supprimé n'est pas l'utilisateur connecté
-            return $this->redirectToRoute('admin_user_view');
-        }
-    }
 }

@@ -47,7 +47,6 @@ class ProfileController extends AbstractController
             // Gestion du fichier image
             $imageFile = $profilForm->get('image')->getData();
             if($imageFile){
-
                 $oldImageFilename = $participant->getImageFilename();
                 if ($oldImageFilename && $oldImageFilename !== 'imPro.png') {
                     $fileUploader->remove($oldImageFilename);

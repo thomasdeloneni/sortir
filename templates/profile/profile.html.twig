@@ -21,11 +21,7 @@
 
     <div class="prodil-info">
         <div class="profil-image">
-            {% if participant.imageFilename %}
-                <img src="{{ asset('uploads/images/' ~ participant.imageFilename) }}" alt="Image de profil">
-            {% else %}
-                <p>Aucune image de profil disponible.</p>
-            {% endif %}
+            <img src="{{ asset(participant.imageFilename ? 'uploads/images/' ~ participant.imageFilename : 'uploads/images/imPro.png') }}" alt="{{ participant.pseudo }}">
         </div>
         <div class="profil-text">
             <ul>
