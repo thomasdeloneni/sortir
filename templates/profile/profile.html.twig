@@ -55,8 +55,18 @@
     </div>
 
     <div class="profilBtn">
-        <a href="{{ path('app_main') }}" title="Accueil">Retour</a>
-        <a href="{{ path('app_profile_update') }}" title="Modifier le profil">Modifier le profil</a>
+
+        {% if current_user is defined %}
+            {% if current_user.id == participant.id %}
+                <a href="{{ path('app_main') }}" title="Accueil">Retour</a>
+                <a href="{{ path('app_profile_update') }}" title="Modifier le profil">Modifier le profil</a>
+            {% else %}
+                <a href="{{ path('admin_user_view') }}" title="Retour à la liste des utilisateur">Liste des utilisateurs</a>
+            {% endif %}
+        {% else %}
+            <a href="{{ path('app_main') }}" title="Accueil">Retour</a>
+            <a href="{{ path('app_profile_update') }}" title="Modifier le profil">Modifier le profil</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

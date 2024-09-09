@@ -3,9 +3,11 @@
 namespace App\Controller;
 
 use App\Form\ProfilType;
+use App\Repository\ParticipantRepository;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -47,7 +49,7 @@ class ProfileController extends AbstractController
             if($imageFile){
 
                 $oldImageFilename = $participant->getImageFilename();
-                if ($oldImageFilename) {
+                if ($oldImageFilename && $oldImageFilename !== 'imPro.png') {
                     $fileUploader->remove($oldImageFilename);
                 }
 
@@ -66,6 +68,25 @@ class ProfileController extends AbstractController
             'profilForm' => $profilForm->createView(),
         ]);
     }
+
+    #[Route('/profile/{id}', name: 'app_profile_id')]
+    public function profileUserId(int $id, ParticipantRepository $participantRepository, Security $security): Response
+    {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        $user = $participantRepository->find($id);
+        $currentUser = $security->getUser();
+
+        if (!$user) {
+            throw $this->createNotFoundException('Participant not found');
+        }
+
+        return $this->render('profile/profile.html.twig', [
+            'participant' => $user,
+            'current_user' => $currentUser,
+        ]);
+    }
+
 
 }
 
