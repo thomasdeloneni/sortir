@@ -3,6 +3,7 @@
 namespace App\Form\model;
 
 use App\Entity\Campus;
+use App\Entity\Participant;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class SortieSearch
