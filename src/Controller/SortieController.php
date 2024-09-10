@@ -14,6 +14,7 @@ use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/sortie')]
 final class SortieController extends AbstractController
@@ -152,33 +153,30 @@ final class SortieController extends AbstractController
     #[Route('/{id}/inscrire', name: 'app_sortie_inscrire')]
     public function inscrire(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager): Response
     {
+        $user = $this->getUser();
+
+        if (!$user) {
+            $this->addFlash('danger', 'Vous devez être connecté pour vous inscrire à une sortie.');
+            return $this->redirectToRoute('app_login');
+        }
+
         $sortie = $sortieRepository->find($id);
 
         if (!$sortie) {
             throw $this->createNotFoundException('Sortie non trouvée');
         }
 
-        if (count($sortie->getParticipant()) >= $sortie->getNbInscriptionsMax()) {
-            $this->addFlash('danger', 'Le nombre maximum de participants a été atteint.');
-            return $this->redirectToRoute('app_main');
+        $this->denyAccessUnlessGranted('inscrire', $sortie);
+
+        if (!$user instanceof \App\Entity\Participant) {
+            throw new \LogicException('User n\'est pas un participant');
         }
 
-        $user = $this->getUser();
+        $sortie->addParticipant($user);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
 
-        if (!$user instanceof Participant) {
-            $this->addFlash('danger', 'Utilisateur non valide.');
-            return $this->redirectToRoute('app_main');
-        }
-
-        if (!$sortie->getParticipant()->contains($user)) {
-            $sortie->addParticipant($user);
-            $entityManager->persist($sortie);
-            $entityManager->flush();
-
-            $this->addFlash('success', 'Vous êtes bien inscrit à la sortie.');
-        } else {
-            $this->addFlash('info', 'Vous êtes déjà inscrit à cette sortie.');
-        }
+        $this->addFlash('success', 'Vous êtes bien inscrit à la sortie.');
 
         return $this->redirectToRoute('app_main');
     }
@@ -186,6 +184,12 @@ final class SortieController extends AbstractController
     #[Route('/{id}/desinscrire', name: 'app_sortie_desinscrire')]
     public function desinscrire(int $id, SortieRepository $sortieRepository, EntityManagerInterface $entityManager, Security $security): Response
     {
+        $user = $this->getUser();
+
+        if (!$user) {
+            $this->addFlash('danger', 'Vous devez être connecté pour vous désinscrire à une sortie.');
+            return $this->redirectToRoute('app_login');
+        }
 
         $sortie = $sortieRepository->find($id);
 
@@ -193,22 +197,19 @@ final class SortieController extends AbstractController
             throw $this->createNotFoundException('Sortie non trouvée');
         }
 
-        $user = $this->getUser();
+        $this->denyAccessUnlessGranted('desinscrire', $sortie);
 
-        if (!$user instanceof Participant) {
-            $this->addFlash('danger', 'Utilisateur non valide.');
-            return $this->redirectToRoute('app_main');
+        if (!$user instanceof \App\Entity\Participant) {
+            throw new \LogicException('User n\'est pas un participant');
         }
 
-        if ($sortie->getParticipant()->contains($user)) {
-            $sortie->removeParticipant($user);
-            $entityManager->persist($sortie);
-            $entityManager->flush();
 
-            $this->addFlash('success', 'Vous vous êtes désinscrit de la sortie.');
-        } else {
-            $this->addFlash('danger', 'Vous n\'étiez pas inscrit à cette sortie.');
-        }
+        $sortie->removeParticipant($user);
+        $entityManager->persist($sortie);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'Vous vous êtes désinscrit de la sortie.');
+
 
         return $this->redirectToRoute('app_main');
     }
