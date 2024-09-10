@@ -50,7 +50,6 @@ class SortieType extends AbstractType
             ->add('campus', EntityType::class, [
                 'class' => Campus::class,
                 'choice_label' => 'nom',
-                'data' => $this->security->getUser()->getCampus(),
             ])
             ->add('Enregistrer', SubmitType::class, [
                 'label' => 'Enregistrer',

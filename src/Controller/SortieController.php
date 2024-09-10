@@ -19,13 +19,14 @@ use Symfony\Component\Routing\Attribute\Route;
 final class SortieController extends AbstractController
 {
 
-    #[Route('/new', name: 'app_sortie_new')]
+    #[Route('/', name: 'app_sortie_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
+        $userEnCours = $this->getUser();
+        $sortie->setCampus($userEnCours->getCampus());
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
-        $userEnCours = $this->getUser();
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {

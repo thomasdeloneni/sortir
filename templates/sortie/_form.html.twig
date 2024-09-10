@@ -29,7 +29,8 @@
             <br>
         </div>
         <div class="localisation">
-            {{ form_label(form.campus)}}
+
+            {{ form_label(form.campus) }}
             {{ form_widget(form.campus) }}
             <br>
             {{ form_label(form.ville)}}
@@ -61,7 +62,7 @@
             document.getElementById('lieu-info').innerHTML = '';
 
             if (villeId) {
-                const baseUrl = `${window.location.origin}/public/api/ville/${villeId}`;
+                const baseUrl = `${window.location.origin}/sortir/public/api/ville/${villeId}`;
                 fetch(baseUrl)
                     .then(response => response.json())
                     .then(lieux => {
@@ -87,8 +88,7 @@
                 return;
             }
 
-            const baseUrl = `${window.location.origin}/public/api/lieu/${lieuId}`;
-
+            const baseUrl = `${window.location.origin}/sortir/public/api/lieu/${lieuId}`;
             fetch(baseUrl)
                 .then(response => {
                     if (!response.ok) {
