@@ -64,7 +64,7 @@
                     <th>Etat</th>
                     <th>Inscrit</th>
                     <th>Organisateur</th>
-                    <th>Actions</th>
+                    <th colspan="3">Actions</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -92,13 +92,17 @@
                                 <td>Aucun organisateur</td>
                             {% endif %}
                             <td class="btnAction">
-                                <div class="action-columns">
-                                    {% if sortie.organisateur == app.user or app.user.pseudo == "admin" %}
+
+                                    {% if (sortie.organisateur == app.user or app.user.pseudo == "admin" and sortie.etat.libelle == "Créée") %}
                                         <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>
                                     {% endif %}
+                                </td>
+                            <td  class="btnAction">
                                     {% if app.user %}
                                         <a href="{{ path('app_sortie_show', {'id': sortie.id}) }}">Détails</a>
                                     {% endif %}
+                            </td>
+                            <td  class="btnAction">
                                     {% if sortie.nbInscriptionsMax > sortie.participant|length and sortie.etat.libelle == "Ouverte" and not sortie.participant.contains(app.user) %}
                                         <a href="{{ path('app_sortie_inscrire', {'id': sortie.id}) }}">S'inscrire</a>
                                     {% endif %}
@@ -106,7 +110,7 @@
                                         <a href="{{ path('app_sortie_desinscrire', {'id': sortie.id}) }}">Se
                                             désinscrire</a>
                                     {% endif %}
-                                </div>
+
                             </td>
                         </tr>
                     {% endif %}
