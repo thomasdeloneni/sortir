@@ -75,6 +75,10 @@ final class SortieController extends AbstractController
     #[Route('/{id}/edit', name: 'app_sortie_edit')]
     public function edit(Request $request, Sortie $sortie, EntityManagerInterface $entityManager): Response
     {
+        if (!$this->isGranted('edit', $sortie)) {
+         return $this->redirectToRoute('app_main');
+        }
+
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
@@ -167,6 +171,7 @@ final class SortieController extends AbstractController
         }
 
         $this->denyAccessUnlessGranted('inscrire', $sortie);
+
 
         if (!$user instanceof \App\Entity\Participant) {
             throw new \LogicException('User n\'est pas un participant');
