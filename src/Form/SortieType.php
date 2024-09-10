@@ -19,7 +19,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class SortieType extends AbstractType
 {
-    public function __construct(private Security $security) {
+    public function __construct(private Security $security)
+    {
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -37,10 +38,6 @@ class SortieType extends AbstractType
             ])
             ->add('nbInscriptionsMax')
             ->add('infosSortie', TextareaType::class, ['label' => 'Description et infos'])
-//            ->add('etat', EntityType::class, [
-//                'class' => Etat::class,
-//                'choice_label' => 'libelle',
-//            ])
             ->add('ville', EntityType::class, [
                 'class' => Ville::class,
                 'choice_label' => 'nom',
@@ -55,23 +52,9 @@ class SortieType extends AbstractType
                 'choice_label' => 'nom',
                 'data' => $this->security->getUser()->getCampus(),
             ])
-//            ->add('participant', EntityType::class, [
-//                'class' => Participant::class,
-//                'choice_label' => 'prenom',
-//                'multiple' => true,
-//            ])
-//            ->add('organisateur', EntityType::class, [
-//                'class' => Participant::class,
-//                'choice_label' => 'prenom',
-//            ])
-
             ->add('Enregistrer', SubmitType::class, [
                 'label' => 'Enregistrer',
-            ])
-            ->add('Publier', SubmitType::class, [
-                'label' => 'Publier la sortie',
-            ])
-        ;
+            ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

@@ -21,17 +21,14 @@ class SortieRepository extends ServiceEntityRepository
         $this->security = $security;
     }
 
-    public function findAllPaginated()
-    {
-        return $this->createQueryBuilder('s')
-            ->getQuery();
-    }
-
     public function findByFilters(SortieSearch $search)
     {
         $queryBuilder = $this->createQueryBuilder('s')
-            ->leftJoin('s.etat', 'e')
-            ->addSelect('e');
+            ->leftJoin('s.etat', 'e')->addSelect('e')
+            ->leftJoin('s.lieu', 'l')->addSelect('l')
+            ->leftJoin('s.organisateur', 'o')->addSelect('o')
+            ->leftJoin('s.participant', 'p')->addSelect('p')
+            ->leftJoin('s.campus', 'c')->addSelect('c');
 
         if ($search->getNom()) {
             $queryBuilder->andWhere('s.nom LIKE :nom')
@@ -80,28 +77,14 @@ class SortieRepository extends ServiceEntityRepository
     }
 
 
-    //    /**
-    //     * @return Sortie[] Returns an array of Sortie objects
-    //     */
-    //    public function findByExampleField($value): array
+    //    public function findOneBySomeField($value): ?Sortie
     //    {
     //        return $this->createQueryBuilder('s')
     //            ->andWhere('s.exampleField = :val')
     //            ->setParameter('val', $value)
-    //            ->orderBy('s.id', 'ASC')
-    //            ->setMaxResults(10)
     //            ->getQuery()
-    //            ->getResult()
+    //            ->getOneOrNullResult()
     //        ;
     //    }
 
-//        public function findOneBySomeField($value): ?Sortie
-//        {
-//            return $this->createQueryBuilder('s')
-//                ->andWhere('s.exampleField = :val')
-//                ->setParameter('val', $value)
-//                ->getQuery()
-//                ->getOneOrNullResult()
-//            ;
-//        }
 }

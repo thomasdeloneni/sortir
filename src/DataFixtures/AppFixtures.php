@@ -2,6 +2,7 @@
 
 namespace App\DataFixtures;
 
+use App\Service\FileUploader;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use App\Entity\Etat;
@@ -18,7 +19,7 @@ class AppFixtures extends Fixture
 {
     private readonly Generator $faker;
 
-    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher)
+    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher, FileUploader $fileUploader)
     {
         $this->faker = Factory::create('fr_FR');
     }
@@ -31,11 +32,12 @@ class AppFixtures extends Fixture
         $this->addCampus($manager);
         $this->addParticipants(20, $manager);
         $this->addSorties(20, $manager);
+        $this->addSpecificUser($manager);
     }
 
     public function addEtats(ObjectManager $manager): void
     {
-        $libelles = ['Créée', 'Ouverte', 'Clôturée', 'En cours', 'Passée', 'Annulée'];
+        $libelles = ['Créée', 'Ouverte', 'Clôturée','En cours', 'Activité en cours', 'Passée', 'Annulée', 'Historisée'];
 
             foreach ($libelles as $libelle) {
                 $etat = new Etat();
@@ -93,6 +95,7 @@ class AppFixtures extends Fixture
 
         $roles = ['ROLE_USER', 'ROLE_ADMIN'];
         $campus = $manager->getRepository(Campus::class)->findAll();
+
         for ($i = 0; $i < $number; $i++) {
             $participant = new Participant();
             $participant->setPseudo($this->faker->userName);
@@ -100,6 +103,7 @@ class AppFixtures extends Fixture
             $participant->setNom($this->faker->lastName);
             $participant->setPrenom($this->faker->firstName);
             $participant->setTelephone($this->faker->phoneNumber);
+           // $participant->setImageFilename('public/img/userWho.png');
             $participant->setMail($this->faker->email);
             $participant->setCampus($this->faker->randomElement($campus));
             $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
@@ -118,9 +122,11 @@ class AppFixtures extends Fixture
         for ($i = 0; $i < $number; $i++) {
             $sortie = new Sortie();
             $sortie->setNom($this->faker->sentence(3));
-            $sortie->setDateHeureDebut($this->faker->dateTimeBetween('now', '+1 year'));
+            $dateHeureDebut = $this->faker->dateTimeBetween('now', '+1 year');
+            $dateLimiteInscription = $this->faker->dateTimeBetween('now', $dateHeureDebut);
+            $sortie->setDateHeureDebut($dateHeureDebut);
             $sortie->setDuree($this->faker->numberBetween(1, 10) * 60);
-            $sortie->setDateLimiteInscription($this->faker->dateTimeBetween('now', '+1 year'));
+            $sortie->setDateLimiteInscription($dateLimiteInscription);
             $nbInscriptionsMax = $this->faker->numberBetween(5, 20);
             $sortie->setNbInscriptionsMax($nbInscriptionsMax);
             $sortie->setInfosSortie($this->faker->text);
@@ -129,7 +135,7 @@ class AppFixtures extends Fixture
             $sortie->setOrganisateur($this->faker->randomElement($participants));
             $sortie->setCampus($this->faker->randomElement($campus));
             $nbParticipants = $this->faker->numberBetween(1, $nbInscriptionsMax);
-            
+
             for ($i = 0; $i < $nbParticipants; $i++) {
                 $participant = $this->faker->randomElement($participants);
                 if (!$sortie->getParticipant()->contains($participant)) {
@@ -139,8 +145,26 @@ class AppFixtures extends Fixture
 
             $manager->persist($sortie);
         }
-
         $manager->flush();
+    }
+
+    public function addSpecificUser(ObjectManager $manager): void
+    {
+        $existingUser = $manager->getRepository(Participant::class)->findOneBy(['pseudo' => 'user']);
+        if (!$existingUser) {
+            $participant = new Participant();
+            $participant->setPseudo('admin');
+            $participant->setRoles(['ROLE_ADMIN']);
+            $participant->setNom('User');
+            $participant->setPrenom('User');
+            $participant->setTelephone('0000000000');
+           // $participant->setImageFilename('public/img/userWho.png');
+            $participant->setMail('user@example.com');
+            $participant->setCampus($manager->getRepository(Campus::class)->findOneBy([]));
+            $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
+            $manager->persist($participant);
+            $manager->flush();
+        }
     }
 
 }
