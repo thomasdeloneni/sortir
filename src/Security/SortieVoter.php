@@ -51,7 +51,9 @@ class SortieVoter extends Voter
     private function canInscrire(Sortie $sortie, Participant $user): bool
     {
 
-        if ($sortie->getParticipant()->contains($user) && count($sortie->getParticipant()) >= $sortie->getNbInscriptionsMax()) {
+        if ($sortie->getParticipant()->contains($user)
+            && count($sortie->getParticipant()) >= $sortie->getNbInscriptionsMax()
+            && $sortie->getEtat()->getLibelle() === 'Ouverte') {
             return false;
         }
         return true;
@@ -59,7 +61,8 @@ class SortieVoter extends Voter
 
     private function canDesinscrire(Sortie $sortie, Participant $user): bool
     {
-        if ($sortie->getParticipant()->contains($user)) {
+        if ($sortie->getParticipant()->contains($user)
+            && ($sortie->getEtat()->getLibelle() === 'Ouverte' || $sortie->getEtat()->getLibelle() === 'Clôturée')) {
             return true;
         }
         return false;
