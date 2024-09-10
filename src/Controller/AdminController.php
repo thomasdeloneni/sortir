@@ -80,57 +80,57 @@ class AdminController extends AbstractController
         ]);
     }
 
-//    #[Route('/admin/user/view/delete/{id}', name: 'admin_user_view_delete')]
-//    public function viewUserDelete(
-//        int $id,
-//        FileUploader $fileUploader,
-//        ParticipantRepository $participantRepository,
-//        SortieRepository $sortieRepository,
-//        EntityManagerInterface $em,
-//        RequestStack $requestStack,
-//        Security $security
-//    ): Response {
-//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
-//
-//        // Récupérez l'utilisateur connecté
-//        $currentUser = $this->getUser();
-//        if (!$currentUser || !$currentUser->getId()) {
-//            throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
-//        }
-//
-//        $user = $participantRepository->find($id);
-//
-//        // Vérifiez si l'utilisateur existe
-//        if (!$user) {
-//            throw $this->createNotFoundException('Participant non trouvé.');
-//        }
-//
-//        // Suppression des fichiers associés
-//        $oldPictures = $user->getImageFilename();
-//        if ($oldPictures) {
-//            $fileUploader->remove($oldPictures);
-//        }
-//
-//        // Récupérer les sorties organisées par cet utilisateur et les dissocier
-//        $organisateurSorties = $sortieRepository->findBy(['organisateur' => $user->getId()]);
-//        foreach ($organisateurSorties as $sortie) {
-//            $sortie->setOrganisateur(NULL);
-//            $em->persist($sortie);
-//        }
-//
-//        // Suppression de l'utilisateur
-//        $em->remove($user);
-//        $em->flush();
-//
-//        // Si l'utilisateur supprimé est celui connecté, on force une déconnexion
-//        if ($currentUser && $currentUser->getId() === $id) {
-//            // Invalider la session
-//            $requestStack->getSession()->invalidate();
-//            // Déconnecter l'utilisateur
-//            return $this->redirectToRoute('app_logout');
-//        }
-//
-//        return $this->redirectToRoute('admin_user_view');
-//    }
+    #[Route('/admin/user/view/delete/{id}', name: 'admin_user_view_delete')]
+    public function viewUserDelete(
+        int $id,
+        FileUploader $fileUploader,
+        ParticipantRepository $participantRepository,
+        SortieRepository $sortieRepository,
+        EntityManagerInterface $em,
+        RequestStack $requestStack,
+        Security $security
+    ): Response {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
+        // Récupérez l'utilisateur connecté
+        $currentUser = $this->getUser();
+        if (!$currentUser || !$currentUser->getId()) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour effectuer cette action.');
+        }
+
+        // Trouvez l'utilisateur à supprimer
+        $user = $participantRepository->find($id);
+        if (!$user) {
+            throw $this->createNotFoundException('Participant non trouvé.');
+        }
+
+        // Suppression des fichiers associés
+        $oldPictures = $user->getImageFilename();
+        if ($oldPictures) {
+            $fileUploader->remove($oldPictures);
+        }
+
+        // Récupérer les sorties organisées par cet utilisateur et les dissocier
+        $organisateurSorties = $sortieRepository->findBy(['organisateur' => $user]);
+        foreach ($organisateurSorties as $sortie) {
+            $sortie->setOrganisateur(NULL);
+            $em->persist($sortie);
+        }
+
+        // Suppression de l'utilisateur
+        $em->remove($user);
+        $em->flush();
+
+        // Si l'utilisateur supprimé est celui connecté, on force une déconnexion
+        if ($currentUser && $currentUser->getId() === $id) {
+            // Invalider la session
+            $requestStack->getSession()->invalidate();
+            // Déconnecter l'utilisateur
+            return $this->redirectToRoute('app_logout');
+        }
+
+        return $this->redirectToRoute('admin_user_view');
+    }
+
 
 }

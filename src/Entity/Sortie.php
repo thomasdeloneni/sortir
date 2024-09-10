@@ -55,7 +55,7 @@ class Sortie
     private Collection $participant;
 
     #[ORM\ManyToOne(inversedBy: 'sortiesOrganisees')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: true)]
     private ?Participant $organisateur = null;
 
     public function __construct()
@@ -213,9 +213,6 @@ class Sortie
     public function setOrganisateur(?Participant $organisateur): static
     {
         $this->organisateur = $organisateur;
-        if (!$this->participant->contains($organisateur)) {
-            $this->addParticipant($organisateur);
-        }
         return $this;
     }
 

@@ -410,6 +410,11 @@ footer{
     justify-content: space-evenly;
 }
 
+.profil-image img{
+    max-width: 15rem;
+    height: 15rem;
+    object-fit: cover;
+}
 
 @media(max-width: 940px){
     .container_dashboard{
