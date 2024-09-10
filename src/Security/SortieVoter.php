@@ -14,6 +14,12 @@ class SortieVoter extends Voter
     const INSCRIRE = 'inscrire';
     const DESINSCRIRE = 'desinscrire';
 
+    const EDIT = 'edit';
+
+    public function __construct(private Security $security)
+    {
+    }
+
     protected function supports(string $attribute, $subject): bool
     {
         // Only vote on Sortie objects inside this voter
@@ -44,6 +50,8 @@ class SortieVoter extends Voter
         return match ($attribute) {
             self::INSCRIRE => $this->canInscrire($sortie, $user),
             self::DESINSCRIRE => $this->canDesinscrire($sortie, $user),
+            self::EDIT => $this->canEdit($sortie, $user),
+
             default => false,
         };
     }
@@ -66,6 +74,19 @@ class SortieVoter extends Voter
             return true;
         }
         return false;
+    }
+
+    private function canEdit(Sortie $sortie, Participant $user): bool
+    {
+        if ($this->security->isGranted('ROLE_ADMIN')) {
+            return true;
+        }
+        if ($sortie->getOrganisateur() === $user && $sortie->getEtat()->getLibelle() == "Créée") {
+            return true;
+        }
+
+        return false;
+
     }
 
 }
