@@ -6,6 +6,7 @@ use App\Entity\Campus;
 use App\Entity\Participant;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -56,14 +57,26 @@ class ProfilType extends AbstractType
                         'mimeTypesMessage' => 'Please upload a valid pictures',
                     ])
                 ],
-            ])
-        ;
+            ]);
+        // Afficher le champ des rôles uniquement si l'option 'is_admin' est vraie
+        if ($options['is_admin']) {
+            $builder->add('roles', ChoiceType::class, [
+                'choices' => [
+                    'Utilisateur' => 'ROLE_USER',
+                    'Administrateur' => 'ROLE_ADMIN',
+                ],
+                'multiple' => true,
+                'expanded' => true,
+                'label' => 'Rôles : '
+            ]);
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'data_class' => Participant::class,
+            'is_admin' => false,
         ]);
     }
 }

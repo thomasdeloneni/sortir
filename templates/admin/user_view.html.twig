@@ -1,0 +1,52 @@
+{# templates/admin/user_create.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+    <h1>Liste des utilisateurs</h1>
+    <a href="{{ path('app_admin') }}" class="btnReturn" title="Retour au dashboard">Retour</a>
+    <div class="userView">
+        <table>
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Pseudo</th>
+                <th class="responsive_disabled">Nom</th>
+                <th class="responsive_disabled">Prénom</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for user in userView %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td>{{ user.pseudo }}</td>
+                    <td class="responsive_disabled">{{ user.nom }}</td>
+                    <td class="responsive_disabled">{{ user.prenom }}</td>
+
+
+                    {% if user.id == currentUser.id %}
+                    <td class="connectUser">
+                        <ul>
+                            <li>Utilisateur connecté</li>
+                        </ul>
+                    </td>
+                    {% else %}
+                    <td>
+                        <ul class="action_container">
+                            <li><a href="{{ path('app_profile_id', { 'id': user.id }) }}" title="creation utilisateur">Voir le profil</a></li>
+{#                            <li><a href="{{ path('admin_user_view_delete', { 'id': user.id }) }}" class="deleteProfil" title="Supprimer le profil">Supprimer le profil</a></li>#}
+                        </ul>
+                    </td>
+                    {% endif %}
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="2">Aucun utilisateur trouvé</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
