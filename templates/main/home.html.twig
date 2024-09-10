@@ -86,7 +86,11 @@
                             {% else %}
                                 <td></td>
                             {% endif %}
-                            <td>{{ sortie.organisateur.prenom }} {{ sortie.organisateur.nom }}</td>
+                            {% if sortie.organisateur is not null %}
+                                <td>{{sortie.organisateur.prenom}} {{sortie.organisateur.nom}}</td>
+                            {% else %}
+                                <td>Aucun organisateur</td>
+                            {% endif %}
                             <td class="btnAction">
                                 <div class="action-columns">
                                     {% if sortie.organisateur == app.user or app.user.pseudo == "admin" %}

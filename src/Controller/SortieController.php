@@ -37,6 +37,12 @@ final class SortieController extends AbstractController
                     $sortie->setEtat($etat);
                 }
                 $sortie->setOrganisateur($userEnCours);
+
+                // Ajouter l'organisateur en tant que participant si nécessaire
+                if (!$sortie->getParticipant()->contains($userEnCours)) {
+                    $sortie->addParticipant($userEnCours);
+                }
+
                 $entityManager->persist($sortie);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_main');
