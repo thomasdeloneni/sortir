@@ -5,7 +5,6 @@ namespace App\Tests\Repository;
 use App\DataFixtures\AppFixtures;
 use App\Entity\Participant;
 use App\Form\model\SortieSearch;
-use App\Repository\ParticipantRepository;
 use App\Repository\SortieRepository;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
@@ -14,9 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class SortieRepositoryTest extends WebTestCase
 {
@@ -81,7 +78,12 @@ class SortieRepositoryTest extends WebTestCase
         $sortieRepository = self::getContainer()->get(SortieRepository::class);
         $results = $sortieRepository->findByFilters($search);
         $this->assertNotEmpty($results);
+
+        foreach ($results as $result) {
+            $this->assertEquals($search->getCampus(), $result->getCampus());
+        }
     }
+
 
     public function testFindByFiltersWhenIsOrganizer(): void
     {
@@ -133,6 +135,9 @@ class SortieRepositoryTest extends WebTestCase
         $results = $sortieRepository->findByFilters($search);
 
         $this->assertNotEmpty($results);
+        foreach ($results as $result) {
+            $this->assertContains($user, $result->getParticipant());
+        }
     }
 
     public function testFindByFiltersWhenIsNotRegistered(): void
@@ -157,6 +162,9 @@ class SortieRepositoryTest extends WebTestCase
         $results = $sortieRepository->findByFilters($search);
 
         $this->assertNotEmpty($results);
+        foreach ($results as $result) {
+            $this->assertNotContains($user, $result->getParticipant());
+        }
     }
 
     public function testFindByFiltersWhenIsFinished(): void
@@ -168,5 +176,8 @@ class SortieRepositoryTest extends WebTestCase
         $results = $sortieRepository->findByFilters($search);
 
         $this->assertNotEmpty($results);
+        foreach ($results as $result) {
+            $this->assertEquals('Passée', $result->getEtat()->getLibelle());
+        }
     }
 }
