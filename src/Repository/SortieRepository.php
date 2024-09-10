@@ -78,6 +78,7 @@ class SortieRepository extends ServiceEntityRepository
         return $queryBuilder->getQuery()->getResult();
     }
 
+
     //    public function findOneBySomeField($value): ?Sortie
     //    {
     //        return $this->createQueryBuilder('s')

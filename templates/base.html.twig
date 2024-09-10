@@ -21,45 +21,46 @@
         {% block stylesheets %}
          {# notre css #}
             <link rel="stylesheet" href="{{ asset('styles/app.css') }}">
-
-
         {% endblock %}
 
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
-    </head>
-    <body>
-        {# entête du site #}
-        <header>
-            <div class="header-logo">
-                <a href="{{ path('app_main') }}" title="Retour Accueil">
-                    <img src="{{ asset('img/icon_sortir.png') }}" alt="Sortir Logo">
-                </a>
-            </div>
-            <h1>Sortir</h1> 
-            <nav class="header-nav">
-                <a href="{{ path('app_main') }}" title="Accueil">Accueil</a>
-                {% if app.user %}
-                <a href="{{ path('app_logout') }}" title="Logout">Se déconnecter</a>
-                <a href="{{ path('app_profile') }}" title="Profile">Mon profil</a>
-                <a href="{{ path('app_sortie_new') }}" title="new-sortie">Créer une sortie</a>
-                {% endif %}
-                {% if not app.user %}    
-                    <a href="{{ path('app_login') }}" title="Login">connexion</a>   
-                {% endif %}
-            </nav>
-        </header>
+</head>
+<body>
+{# entête du site #}
+<header>
+    <div class="header-logo">
+        <a href="{{ path('app_main') }}" title="Retour Accueil">
+            <img src="{{ asset('img/icon_sortir.png') }}" alt="Sortir Logo">
+        </a>
+    </div>
+    <h1>Sortir</h1>
+    <nav class="header-nav">
+        {% if app.user %}
+            <a href="{{ path('app_main') }}" title="Accueil">Accueil</a>
+            <a href="{{ path('app_logout') }}" title="Logout">Se déconnecter</a>
+            <a href="{{ path('app_profile') }}" title="Profile">Mon profil</a>
+            <a href="{{ path('app_sortie_new') }}" title="new-sortie">Créer une sortie</a>
+        {% endif %}
+        {% if not app.user %}
+            <a href="{{ path('app_login') }}" title="Login">connexion</a>
+        {% endif %}
+        {% if is_granted('ROLE_ADMIN') %}
+            <a href="{{ path('app_admin') }}" title="dashboard">Admin</a>
+        {% endif %}
+    </nav>
+</header>
 
-        <main>
-            {# contenu principal de chaque page #}
-            {% block body %}{% endblock %}
-            {# pied-de-page du site #}
-        </main>
-        <footer>
-            <div>
-                © Sortir {{ "now"|date("Y") }}
-            </div>
-        </footer>
-    </body>
+<main>
+    {# contenu principal de chaque page #}
+    {% block body %}{% endblock %}
+    {# pied-de-page du site #}
+</main>
+<footer>
+    <div>
+        © Sortir {{ "now"|date("Y") }}
+    </div>
+</footer>
+</body>
 </html>
