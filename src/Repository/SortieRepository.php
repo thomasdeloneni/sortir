@@ -28,7 +28,9 @@ class SortieRepository extends ServiceEntityRepository
             ->leftJoin('s.lieu', 'l')->addSelect('l')
             ->leftJoin('s.organisateur', 'o')->addSelect('o')
             ->leftJoin('s.participant', 'p')->addSelect('p')
-            ->leftJoin('s.campus', 'c')->addSelect('c');
+            ->leftJoin('s.campus', 'c')->addSelect('c')
+            ->where('e.libelle != :historisee')
+            ->setParameter('historisee', 'Historisée');
 
         if ($search->getNom()) {
             $queryBuilder->andWhere('s.nom LIKE :nom')

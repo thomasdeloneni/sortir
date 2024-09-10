@@ -11,25 +11,29 @@ use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
 use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Doctrine\ORM\EntityManagerInterface;
+use PHPUnit\Framework\MockObject\Exception;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
-use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
+use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
-class SortieRepositoryTest extends KernelTestCase
+class SortieRepositoryTest extends WebTestCase
 {
     private ?EntityManagerInterface $entityManager;
     private UserPasswordHasherInterface $userPasswordHasher;
-    private SessionInterface $session;
+//    private SessionInterface $session;
+    private KernelBrowser $client;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
-        self::bootKernel();
-
+        $this->client = static::createClient();
         $this->entityManager = self::getContainer()->get('doctrine')->getManager();
         $this->userPasswordHasher = self::getContainer()->get(UserPasswordHasherInterface::class);
-        $this->session = self::getContainer()->get('session');
+
         $this->purgeDatabase();
         $this->loadFixtures();
     }
@@ -57,29 +61,6 @@ class SortieRepositoryTest extends KernelTestCase
         $executor->execute($loader->getFixtures());
     }
 
-//    public function testFindByFiltersReturnsResultsBasedOnIsInscrit(): void
-//    {
-//        $userIds = $this->entityManager->getRepository(Participant::class)->createQueryBuilder('p')
-//            ->select('p.id')
-//            ->where('p.pseudo != :admin')
-//            ->setParameter('admin', 'admin')
-//            ->getQuery()
-//            ->getArrayResult();
-//
-//        $randomId = $userIds[array_rand($userIds)]['id'];
-//
-//        $user = $this->entityManager->getRepository(Participant::class)->find($randomId);
-//
-//        $search = new SortieSearch();
-//        $search->setIsInscrit(true);
-//
-//        $sortieRepository = self::getContainer()->get(SortieRepository::class);
-//        $results = $sortieRepository->findByFilters($search);
-//
-//        $this->assertNotEmpty($results);
-//
-//    }
-
     public function testFindByFiltersReturnsResultsWhenDateRangeMatches(): void
     {
         $search = new SortieSearch();
@@ -106,33 +87,86 @@ class SortieRepositoryTest extends KernelTestCase
     {
         $userIds = $this->entityManager->getRepository(Participant::class)->createQueryBuilder('p')
             ->select('p.id')
-            ->where('p.pseudo != :adminPseudo')
-            ->setParameter('adminPseudo', 'admin')
+            ->where('p.pseudo != :admin')
+            ->setParameter('admin', 'admin')
             ->getQuery()
             ->getArrayResult();
 
-        // Select a random ID from the list
         $randomId = $userIds[array_rand($userIds)]['id'];
 
-        // Retrieve the user with the selected random ID
         $user = $this->entityManager->getRepository(Participant::class)->find($randomId);
 
-        // Set the user in the session
-        $token = new UsernamePasswordToken($user, 'main', $user->getRoles());
-        self::getContainer()->get('security.token_storage')->setToken($token);
-        $this->session->set('_security_main', serialize($token));
+        $this->client->loginUser($user);
 
-        // Set the search criteria
         $search = new SortieSearch();
         $search->setIsOrganizer(true);
 
-        // Retrieve the repository and execute the search
         $sortieRepository = self::getContainer()->get(SortieRepository::class);
         $results = $sortieRepository->findByFilters($search);
 
-        // Assert that the results are not empty
+        $this->assertNotEmpty($results);
+        foreach ($results as $result) {
+            $this->assertEquals($user, $result->getOrganisateur());
+        }
+
+    }
+
+    public function testFindByFiltersWhenIsRegistered(): void
+    {
+        $userIds = $this->entityManager->getRepository(Participant::class)->createQueryBuilder('p')
+            ->select('p.id')
+            ->where('p.pseudo != :admin')
+            ->setParameter('admin', 'admin')
+            ->getQuery()
+            ->getArrayResult();
+
+        $randomId = $userIds[array_rand($userIds)]['id'];
+
+        $user = $this->entityManager->getRepository(Participant::class)->find($randomId);
+
+        $this->client->loginUser($user);
+
+        $search = new SortieSearch();
+        $search->setIsInscrit(true);
+
+        $sortieRepository = self::getContainer()->get(SortieRepository::class);
+        $results = $sortieRepository->findByFilters($search);
+
         $this->assertNotEmpty($results);
     }
 
+    public function testFindByFiltersWhenIsNotRegistered(): void
+    {
+        $userIds = $this->entityManager->getRepository(Participant::class)->createQueryBuilder('p')
+            ->select('p.id')
+            ->where('p.pseudo != :admin')
+            ->setParameter('admin', 'admin')
+            ->getQuery()
+            ->getArrayResult();
 
+        $randomId = $userIds[array_rand($userIds)]['id'];
+
+        $user = $this->entityManager->getRepository(Participant::class)->find($randomId);
+
+        $this->client->loginUser($user);
+
+        $search = new SortieSearch();
+        $search->setIsNotInscrit(true);
+
+        $sortieRepository = self::getContainer()->get(SortieRepository::class);
+        $results = $sortieRepository->findByFilters($search);
+
+        $this->assertNotEmpty($results);
+    }
+
+    public function testFindByFiltersWhenIsFinished(): void
+    {
+        $search = new SortieSearch();
+        $search->setIsFinished(true);
+
+        $sortieRepository = self::getContainer()->get(SortieRepository::class);
+        $results = $sortieRepository->findByFilters($search);
+
+        $this->assertNotEmpty($results);
+    }
 }
