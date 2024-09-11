@@ -25,6 +25,7 @@ final class SortieController extends AbstractController
         $sortie = new Sortie();
         $userEnCours = $this->getUser();
         $sortie->setCampus($userEnCours->getCampus());
+        
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
@@ -51,8 +52,10 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_sortie_show')]
-    public function sortieDetail(Sortie $sortie): Response
+    public function sortieDetail(int $id, EntityManagerInterface $entityManager): Response
     {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
         $lieu = $sortie->getLieu();
         $ville = $lieu->getVille();
         $participants = $sortie->getParticipant();
@@ -67,8 +70,10 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_sortie_edit')]
-    public function edit(Request $request, Sortie $sortie, EntityManagerInterface $entityManager): Response
+    public function edit(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
 
@@ -94,9 +99,11 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/delete/{id}', name: 'app_sortie_delete',)]
-    public function delete(Request $request, Sortie $sortie, EntityManagerInterface $entityManager): Response
+    public function delete(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->getPayload()->getString('_token'))) {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
+
+        if ($this->isCsrfTokenValid('delete' . $sortie->getId(), $request->request->get('_token'))) {
             $entityManager->remove($sortie);
             $entityManager->flush();
         }
@@ -105,8 +112,9 @@ final class SortieController extends AbstractController
     }
 
     #[Route('/cancel/{id}', name: 'app_sortie_cancel')]
-    public function cancel(Request $request, Sortie $sortie, EntityManagerInterface $entityManager): Response
+    public function cancel(Request $request, int $id, EntityManagerInterface $entityManager): Response
     {
+        $sortie = $entityManager->getRepository(Sortie::class)->find($id);
         // si la sortie a déjà été annulée l'accès à cette page n'est plus possible
         if ($sortie->getEtat() && $sortie->getEtat()->getLibelle() === 'Annulée') {
             return $this->redirectToRoute('app_main');
@@ -133,7 +141,7 @@ final class SortieController extends AbstractController
                 $entityManager->persist($sortie);
                 $entityManager->flush();
 
-                return $this->redirectToRoute('app_main', ['id' => $sortie->getId()]);
+                return $this->redirectToRoute('app_main');
             }
         }
         return $this->render('sortie/cancel.html.twig', [

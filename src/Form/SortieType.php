@@ -53,6 +53,9 @@ class SortieType extends AbstractType
             ])
             ->add('Enregistrer', SubmitType::class, [
                 'label' => 'Enregistrer',
+            ])
+            ->add('Publier', SubmitType::class, [
+                'label' => 'Publier',
             ]);
     }
 

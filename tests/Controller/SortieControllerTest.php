@@ -4,8 +4,11 @@ namespace App\Tests\Controller;
 
 use App\DataFixtures\AppFixtures;
 use App\Entity\Campus;
+use App\Entity\Etat;
+use App\Entity\Lieu;
 use App\Entity\Participant;
 use App\Entity\Sortie;
+use App\Entity\Ville;
 use App\Repository\EtatRepository;
 use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
 use Doctrine\Common\DataFixtures\Loader;
@@ -24,6 +27,8 @@ final class SortieControllerTest extends WebTestCase
 
     private Participant $participant;
 
+    private Sortie $sortie;
+
     protected function setUp(): void
     {
         $this->client = static::createClient();
@@ -36,6 +41,7 @@ final class SortieControllerTest extends WebTestCase
         $this->loadFixtures();
 
         $this->participant = $this->createParticipant();
+        $this->sortie = $this->createSortie();
     }
 
     protected function tearDown(): void
@@ -88,6 +94,54 @@ final class SortieControllerTest extends WebTestCase
         $this->entityManager->flush();
 
         return $user;
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // création d'une sortie test
+    public function createSortie(): Sortie {
+
+        $etat = $this->entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'Créée']);
+
+        $campus = new Campus();
+        $campus->setNom('Rennes');
+        $this->entityManager->persist($campus);
+        $this->entityManager->flush();
+
+        $ville = new Ville();
+        $ville->setNom("Angers");
+        $ville->setCodePostal("49000");
+        $this->entityManager->persist($ville);
+        $this->entityManager->flush();
+
+        $lieu = new Lieu();
+        $lieu->setNom("Get out");
+        $lieu->setRue("2 rue du mabilais");
+        $lieu->setVille($ville);
+
+        $this->entityManager->persist($lieu);
+        $this->entityManager->flush();
+
+        $sortie = new Sortie();
+        $sortie->setNom('Escape Game');
+        $sortie->setDateLimiteInscription(new \DateTime('2025-01-17 00:03:39'));
+        $sortie->setDateHeureDebut(new \DateTime('2025-02-19 00:03:39'));
+        $sortie->setNbInscriptionsMax(20);
+        $sortie->setInfosSortie('Réussir à sortir');
+        $sortie->setDuree(20);
+        $sortie->setEtat($etat);
+        $sortie->setLieu($lieu);
+        $sortie->setCampus($campus);
+        $sortie->setOrganisateur($this->participant);
+
+        $this->entityManager->persist($sortie);
+        $this->entityManager->flush();
+
+        if ($sortie->getId() === null) {
+            throw new \Exception('La sortie n\'a pas été correctement persistée.');
+        }
+
+        return $sortie;
     }
 
     //test --> si l'user est connecté il a accès à la page de création de sortie
@@ -171,109 +225,113 @@ final class SortieControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-//
-//    public function testShow(): void
-//    {
-//        $this->markTestIncomplete();
-//        $fixture = new Sortie();
-//        $fixture->setNom('My Title');
-//        $fixture->setDateHeureDebut('My Title');
-//        $fixture->setDuree('My Title');
-//        $fixture->setDateLimiteInscription('My Title');
-//        $fixture->setNbInscriptionsMax('My Title');
-//        $fixture->setInfosSortie('My Title');
-//        $fixture->setEtat('My Title');
-//        $fixture->setLieu('My Title');
-//        $fixture->setCampus('My Title');
-//        $fixture->setParticipant('My Title');
-//        $fixture->setOrganisateur('My Title');
-//
-//        $this->manager->persist($fixture);
-//        $this->manager->flush();
-//
-//        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-//
-//        self::assertResponseStatusCodeSame(200);
-//        self::assertPageTitleContains('Sortie');
-//
-//        // Use assertions to check that the properties are properly displayed.
-//    }
-//
-//    public function testEdit(): void
-//    {
-//        $this->markTestIncomplete();
-//        $fixture = new Sortie();
-//        $fixture->setNom('Value');
-//        $fixture->setDateHeureDebut('Value');
-//        $fixture->setDuree('Value');
-//        $fixture->setDateLimiteInscription('Value');
-//        $fixture->setNbInscriptionsMax('Value');
-//        $fixture->setInfosSortie('Value');
-//        $fixture->setEtat('Value');
-//        $fixture->setLieu('Value');
-//        $fixture->setCampus('Value');
-//        $fixture->setParticipant('Value');
-//        $fixture->setOrganisateur('Value');
-//
-//        $this->manager->persist($fixture);
-//        $this->manager->flush();
-//
-//        $this->client->request('GET', sprintf('%s%s/edit', $this->path, $fixture->getId()));
-//
-//        $this->client->submitForm('Update', [
-//            'sortie[nom]' => 'Something New',
-//            'sortie[dateHeureDebut]' => 'Something New',
-//            'sortie[duree]' => 'Something New',
-//            'sortie[dateLimiteInscription]' => 'Something New',
-//            'sortie[nbInscriptionsMax]' => 'Something New',
-//            'sortie[infosSortie]' => 'Something New',
-//            'sortie[etat]' => 'Something New',
-//            'sortie[lieu]' => 'Something New',
-//            'sortie[campus]' => 'Something New',
-//            'sortie[participant]' => 'Something New',
-//            'sortie[organisateur]' => 'Something New',
-//        ]);
-//
-//        self::assertResponseRedirects('/sortie/');
-//
-//        $fixture = $this->repository->findAll();
-//
-//        self::assertSame('Something New', $fixture[0]->getNom());
-//        self::assertSame('Something New', $fixture[0]->getDateHeureDebut());
-//        self::assertSame('Something New', $fixture[0]->getDuree());
-//        self::assertSame('Something New', $fixture[0]->getDateLimiteInscription());
-//        self::assertSame('Something New', $fixture[0]->getNbInscriptionsMax());
-//        self::assertSame('Something New', $fixture[0]->getInfosSortie());
-//        self::assertSame('Something New', $fixture[0]->getEtat());
-//        self::assertSame('Something New', $fixture[0]->getLieu());
-//        self::assertSame('Something New', $fixture[0]->getCampus());
-//        self::assertSame('Something New', $fixture[0]->getParticipant());
-//        self::assertSame('Something New', $fixture[0]->getOrganisateur());
-//    }
-//
-//    public function testRemove(): void
-//    {
-//        $this->markTestIncomplete();
-//        $fixture = new Sortie();
-//        $fixture->setNom('Value');
-//        $fixture->setDateHeureDebut('Value');
-//        $fixture->setDuree('Value');
-//        $fixture->setDateLimiteInscription('Value');
-//        $fixture->setNbInscriptionsMax('Value');
-//        $fixture->setInfosSortie('Value');
-//        $fixture->setEtat('Value');
-//        $fixture->setLieu('Value');
-//        $fixture->setCampus('Value');
-//        $fixture->setParticipant('Value');
-//        $fixture->setOrganisateur('Value');
-//
-//        $this->manager->persist($fixture);
-//        $this->manager->flush();
-//
-//        $this->client->request('GET', sprintf('%s%s', $this->path, $fixture->getId()));
-//        $this->client->submitForm('Delete');
-//
-//        self::assertResponseRedirects('/sortie/');
-//        self::assertSame(0, $this->repository->count([]));
-//    }
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // test --> l'affichage d'une sortie
+    public function testShowSortie(): void {
+
+        //on log l'utilisateur
+        $this->client->loginUser($this->participant);
+
+        $crawler = $this->client->request('GET', '/sortie/' . $this->sortie->getId());
+        var_dump($crawler);
+
+        $this->assertStringContainsString(
+            $this->sortie->getDuree(),
+            $crawler->filter('body')->text()
+        );
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // test --> Modifier une sortie si elle est publiée
+    public function testEditSortieIfPublished(): void {
+        $this->client->loginUser($this->participant);
+
+        $crawler = $this->client->request('GET', sprintf('/sortie/%d/edit', $this->sortie->getId()));
+
+        $form = $crawler->selectButton('Publier')->form([
+                'sortie[nom]' => 'Crêperie',
+        ]);
+
+        $etat = $this->entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'Ouverte']);
+        $this->sortie->setEtat($etat);
+
+        $this->client->submit($form);
+
+        $sortieModifiee = $this->entityManager->getRepository(Sortie::class)->find($this->sortie->getId());
+
+        // vérifier l'état et le nouveau nom pour la sortie
+        $this->assertEquals('Crêperie', $sortieModifiee->getNom());
+
+        $this->assertEquals('Ouverte', $sortieModifiee->getEtat()->getLibelle());
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // test --> Modifier une sortie si elle est enregistrée
+    public function testEditSortieIfSaved(): void {
+        $this->client->loginUser($this->participant);
+
+        $crawler = $this->client->request('GET', sprintf('/sortie/%d/edit', $this->sortie->getId()));
+
+        $form = $crawler->selectButton('Enregistrer')->form([
+            'sortie[nom]' => 'Bar',
+        ]);
+
+        $this->client->submit($form);
+
+        $sortieModifiee = $this->entityManager->getRepository(Sortie::class)->find($this->sortie->getId());
+
+        // vérifier le nouveau nom de la sortie
+        $this->assertEquals('Bar', $sortieModifiee->getNom());
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // test --> vérifier si le formulaire de modification de sortie est annulé
+    public function testIfEditSortieFormIsCancelled(): void
+    {
+        $this->client->loginUser($this->participant);
+
+        $this->client->request('GET', sprintf('/sortie/%d/edit', $this->sortie->getId()));
+
+        $crawler = $this->client->clickLink('Annuler');
+
+        // vérifier la page avec le nom de l'utilisateur
+        $this->assertStringContainsString(
+            $this->participant->getNom(),
+            $crawler->filter('body')->text()
+        );
+
+        // ce n'est pas une redirection, mais un lien cliquable = 200
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+    }
+
+    ////////////////////////////////////////////////////////////////////////////////
+
+    // test --> vérifier si la sortie est bien annulée
+    public function testIfSortieIsCancelled(): void
+    {
+        $this->client->loginUser($this->participant);
+
+        $crawler = $this->client->request('GET', '/sortie/cancel/' . $this->sortie->getId());
+
+        $form = $crawler->selectButton('Enregistrer')->form();
+
+        $etat = $this->entityManager->getRepository(Etat::class)->findOneBy(['libelle' => 'Annulée']);
+
+        $this->sortie->setEtat($etat);
+
+        $this->client->submit($form);
+
+        $this->assertResponseRedirects('/');
+        $this->client->followRedirect();
+        $this->assertResponseStatusCodeSame(Response::HTTP_OK);
+
+        $sortieAnnulee = $this->entityManager->getRepository(Sortie::class)->find($this->sortie->getId());
+
+        // vérifier l'état de la sortie
+        $this->assertEquals('Annulée', $sortieAnnulee->getEtat()->getLibelle());
+    }
 }
