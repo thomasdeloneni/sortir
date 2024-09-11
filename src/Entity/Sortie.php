@@ -111,7 +111,7 @@ class Sortie
 
     public function setDateLimiteInscription(\DateTimeInterface $dateLimiteInscription): static
     {
-        if ($dateLimiteInscription > $this->dateHeureDebut) {
+        if ($this->dateHeureDebut !== null && $dateLimiteInscription > $this->dateHeureDebut) {
             throw new \InvalidArgumentException("La date limite d'inscription ne peut pas être postérieure à la date de début.");
         }
         $this->dateLimiteInscription = $dateLimiteInscription;
