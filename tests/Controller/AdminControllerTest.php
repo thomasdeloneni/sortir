@@ -138,8 +138,8 @@ class AdminControllerTest extends WebTestCase
             'profil[telephone]' => '0269753648',
             'profil[roles]' => ['ROLE_USER'],
             'profil[mail]' => 'testeurUser@example.com',
-            'profil[password][first]' => 'password',
-            'profil[password][second]' => 'password',
+            'profil[password][first]' => 'password9',
+            'profil[password][second]' => 'password9',
         ]);
         $this->client->submit($form);
 

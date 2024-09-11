@@ -108,7 +108,7 @@ class AppFixtures extends Fixture
             // $participant->setImageFilename('public/img/userWho.png');
             $participant->setMail($this->faker->email());
             $participant->setCampus($this->faker->randomElement($campus));
-            $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
+            $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password9'));
             $manager->persist($participant);
         }
 
@@ -163,7 +163,7 @@ class AppFixtures extends Fixture
             // $participant->setImageFilename('public/img/userWho.png');
             $participant->setMail('user@example.com');
             $participant->setCampus($manager->getRepository(Campus::class)->findOneBy([]));
-            $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
+            $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password9'));
             $manager->persist($participant);
             $manager->flush();
         }

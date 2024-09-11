@@ -41,7 +41,6 @@ header{
     padding: 0 2rem;
     background-color: #180344;
     color: #FFF;
-
 }
 
 header a,
@@ -152,6 +151,11 @@ footer{
 .user_new .btn:hover{
     color: #180344;
     background-color: #ffce00;
+}
+
+.user_new li{
+    color: red;
+    font-weight: bold;
 }
 
 .profilUpdate form,

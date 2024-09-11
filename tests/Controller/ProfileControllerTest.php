@@ -155,8 +155,8 @@ class ProfileControllerTest extends WebTestCase
             'profil[nom]' => 'steeve',
             'profil[telephone]' => '0269753648',
             'profil[mail]' => 'testeurUser@example.com',
-            'profil[password][first]' => 'password',
-            'profil[password][second]' => 'password',
+            'profil[password][first]' => 'password9',
+            'profil[password][second]' => 'password9',
         ]);
         $this->client->submit($form);
 
