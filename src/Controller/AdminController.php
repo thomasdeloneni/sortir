@@ -27,18 +27,35 @@ class AdminController extends AbstractController
         ]);
     }
 
+//    #[Route('/admin/user/view', name: 'admin_user_view')]
+//    public function viewUser(ParticipantRepository $participantRepository, Security $security): Response
+//    {
+//        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+//        $user_view = $participantRepository->findAll();
+//        $currentUser = $security->getUser();
+//
+//        return $this->render('admin/user_view.html.twig', [
+//            'userView' => $user_view,
+//            'currentUser' => $currentUser,
+//        ]);
+//    }
+
     #[Route('/admin/user/view', name: 'admin_user_view')]
     public function viewUser(ParticipantRepository $participantRepository, Security $security): Response
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
+
         $user_view = $participantRepository->findAll();
+        $user_admin = $participantRepository->findAllUser(['ROLE_ADMIN']);
         $currentUser = $security->getUser();
 
         return $this->render('admin/user_view.html.twig', [
             'userView' => $user_view,
             'currentUser' => $currentUser,
+            'userAdmin' => $user_admin,
         ]);
     }
+
 
     #[Route('/admin/user/new', name: 'admin_user_new')]
     public function newUser(Request $request, EntityManagerInterface $em, UserPasswordHasherInterface $passwordHasher, FileUploader $fileUploader): Response
@@ -129,6 +146,7 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_logout');
         }
 
+        $this->addFlash('success', 'L\'utilisateur a bien été supprimé.');
         return $this->redirectToRoute('admin_user_view');
     }
 

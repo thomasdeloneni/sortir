@@ -33,6 +33,21 @@ class ParticipantRepository extends ServiceEntityRepository implements PasswordU
         $this->getEntityManager()->flush();
     }
 
+    public function findAllUser(?array $roles)
+    {
+        $query = $this->createQueryBuilder('u');
+
+        if (!empty($roles)) {
+            $query->andWhere('u.roles LIKE :roles')
+                ->setParameter('roles', '%' . implode('%', $roles) . '%');
+        }
+
+//        $query->orderBy('u.firstName', 'ASC');
+
+        return $query->getQuery()->getResult();
+    }
+
+
     //    /**
     //     * @return Participant[] Returns an array of Participant objects
     //     */

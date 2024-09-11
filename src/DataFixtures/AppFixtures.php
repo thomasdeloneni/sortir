@@ -12,6 +12,7 @@ use Faker\Factory;
 use App\Entity\Lieu;
 use App\Entity\Campus;
 use App\Entity\Participant;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use App\Entity\Sortie;
 
@@ -19,9 +20,10 @@ class AppFixtures extends Fixture
 {
     private readonly Generator $faker;
 
-    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher, FileUploader $fileUploader)
+    public function __construct(private readonly UserPasswordHasherInterface $userPasswordHasher)
     {
         $this->faker = Factory::create('fr_FR');
+
     }
 
     public function load(ObjectManager $manager): void
@@ -39,21 +41,21 @@ class AppFixtures extends Fixture
     {
         $libelles = ['Créée', 'Ouverte', 'Clôturée','En cours', 'Activité en cours', 'Passée', 'Annulée', 'Historisée'];
 
-            foreach ($libelles as $libelle) {
-                $etat = new Etat();
-                $etat->setLibelle($libelle);
-                $manager->persist($etat);
-            }
+        foreach ($libelles as $libelle) {
+            $etat = new Etat();
+            $etat->setLibelle($libelle);
+            $manager->persist($etat);
+        }
 
-            $manager->flush();
+        $manager->flush();
     }
 
     public function addVilles(int $number, ObjectManager $manager): void
     {
         for ($i = 0; $i < $number; $i++) {
             $ville = new Ville();
-            $ville->setNom($this->faker->city);
-            $ville->setCodePostal($this->faker->postcode);
+            $ville->setNom($this->faker->city());
+            $ville->setCodePostal($this->faker->postcode());
             $manager->persist($ville);
         }
 
@@ -66,10 +68,10 @@ class AppFixtures extends Fixture
         $villes = $manager->getRepository(Ville::class)->findAll();
         for ($i = 0; $i < $number; $i++) {
             $lieu = new Lieu();
-            $lieu->setNom($this->faker->company);
-            $lieu->setRue($this->faker->streetAddress);
-            $lieu->setLatitude($this->faker->latitude);
-            $lieu->setLongitude($this->faker->longitude);
+            $lieu->setNom($this->faker->company());
+            $lieu->setRue($this->faker->streetAddress());
+            $lieu->setLatitude($this->faker->latitude());
+            $lieu->setLongitude($this->faker->longitude());
             $lieu->setVille($this->faker->randomElement($villes));
             $manager->persist($lieu);
         }
@@ -98,13 +100,13 @@ class AppFixtures extends Fixture
 
         for ($i = 0; $i < $number; $i++) {
             $participant = new Participant();
-            $participant->setPseudo($this->faker->userName);
+            $participant->setPseudo($this->faker->userName());
             $participant->setRoles([$this->faker->randomElement($roles)]);
-            $participant->setNom($this->faker->lastName);
-            $participant->setPrenom($this->faker->firstName);
-            $participant->setTelephone($this->faker->phoneNumber);
-           // $participant->setImageFilename('public/img/userWho.png');
-            $participant->setMail($this->faker->email);
+            $participant->setNom($this->faker->lastName());
+            $participant->setPrenom($this->faker->firstName());
+            $participant->setTelephone($this->faker->phoneNumber());
+            // $participant->setImageFilename('public/img/userWho.png');
+            $participant->setMail($this->faker->email());
             $participant->setCampus($this->faker->randomElement($campus));
             $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
             $manager->persist($participant);
@@ -129,7 +131,7 @@ class AppFixtures extends Fixture
             $sortie->setDateLimiteInscription($dateLimiteInscription);
             $nbInscriptionsMax = $this->faker->numberBetween(5, 20);
             $sortie->setNbInscriptionsMax($nbInscriptionsMax);
-            $sortie->setInfosSortie($this->faker->text);
+            $sortie->setInfosSortie($this->faker->text());
             $sortie->setEtat($this->faker->randomElement($etats));
             $sortie->setLieu($this->faker->randomElement($lieux));
             $sortie->setOrganisateur($this->faker->randomElement($participants));
@@ -158,7 +160,7 @@ class AppFixtures extends Fixture
             $participant->setNom('User');
             $participant->setPrenom('User');
             $participant->setTelephone('0000000000');
-           // $participant->setImageFilename('public/img/userWho.png');
+            // $participant->setImageFilename('public/img/userWho.png');
             $participant->setMail('user@example.com');
             $participant->setCampus($manager->getRepository(Campus::class)->findOneBy([]));
             $participant->setPassword($this->userPasswordHasher->hashPassword($participant, 'password'));
