@@ -31,14 +31,7 @@ class MainController extends AbstractController
         $form = $this->createForm(SortieFilterType::class, $search);
         $form->handleRequest($request);
 
-        $queryBuilder = $sortieRepository->createQueryBuilder('s')
-            ->leftJoin('s.etat', 'e')->addSelect('e')
-            ->leftJoin('s.lieu', 'l')->addSelect('l')
-            ->leftJoin('s.organisateur', 'o')->addSelect('o')
-            ->leftJoin('s.participant', 'p')->addSelect('p')
-            ->leftJoin('s.campus', 'c')->addSelect('c')
-            ->where('e.libelle != :historisee')
-            ->setParameter('historisee', 'Historisée');
+        $queryBuilder = $sortieRepository->findByFilters($search);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $queryBuilder = $sortieRepository->findByFilters($search);
