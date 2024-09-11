@@ -31,6 +31,16 @@ class ProfilType extends AbstractType
                 'invalid_message' => 'The password fields must match.',
                 'first_options'  => ['label' => 'Mot de passe : ', 'hash_property_path' => 'password'],
                 'second_options' => ['label' => 'Confirmation : '],
+                'constraints' => [
+                    new \Symfony\Component\Validator\Constraints\Length([
+                        'min' => 8,
+                        'minMessage' => 'Le mot de passe doit contenir au moins 8 caractères.',
+                    ]),
+                    new \Symfony\Component\Validator\Constraints\Regex([
+                        'pattern' => '/\d/',
+                        'message' => 'Le mot de passe doit contenir au moins un chiffre.',
+                    ]),
+                ],
                 'required' => false,
                 'mapped' => false,
             ])

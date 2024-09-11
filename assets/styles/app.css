@@ -13,6 +13,10 @@ html, body {
     height: 100%;
 }
 
+header p{
+    font-size: 2rem;
+}
+
 body{
     display: flex;
     flex-direction: column;
@@ -37,7 +41,6 @@ header{
     padding: 0 2rem;
     background-color: #180344;
     color: #FFF;
-
 }
 
 header a,
@@ -56,6 +59,18 @@ header a:active{
 
 main {
     flex: 1;
+}
+
+.profil .alert-success,
+.deleteAlerte{
+    color: #1b9448;
+    font-weight: bold;
+    text-align: center;
+}
+
+.profilUpdate ul li{
+    color: red;
+    font-weight: bold;
 }
 
 footer{
@@ -136,6 +151,11 @@ footer{
 .user_new .btn:hover{
     color: #180344;
     background-color: #ffce00;
+}
+
+.user_new li{
+    color: red;
+    font-weight: bold;
 }
 
 .profilUpdate form,
@@ -302,6 +322,13 @@ footer{
     transition: 0.2s;
 }
 
+.userView_btnToBack{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
 .userView {
     width: 100%;
     margin: 0 auto;
@@ -321,6 +348,11 @@ footer{
 
 .userView thead {
     background-color: #f2f2f2;
+}
+
+.userView .adminNotDelete{
+    color: #180344;
+    font-weight: bold;
 }
 
 .userView th {
@@ -344,8 +376,10 @@ footer{
 }
 
 .userView li {
-    display: inline-block;
-    margin-right: 10px;
+    display: flex;
+    width: 11rem;
+    justify-content: center;
+    align-items: center;
 }
 
 .userView button {
@@ -430,6 +464,16 @@ footer{
         border-right: none;
         border-bottom: 1px solid #333;
         padding-right: 0;
+    }
+}
+
+@media(max-width: 756px){
+    .userView ul {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        justify-content: center;
+        align-items: center;
     }
 }
 

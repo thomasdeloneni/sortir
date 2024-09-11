@@ -5,7 +5,19 @@
 
 {% block body %}
     <h1>Liste des utilisateurs</h1>
-    <a href="{{ path('app_admin') }}" class="btnReturn" title="Retour au dashboard">Retour</a>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert-{{ label }} deleteAlerte">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <div class="userView_btnToBack">
+        <a href="{{ path('app_admin') }}" class="btnReturn" title="Retour au dashboard">Retour</a>
+    </div>
+
     <div class="userView">
         <table>
             <thead>
@@ -35,8 +47,12 @@
                     {% else %}
                     <td>
                         <ul class="action_container">
-                            <li><a href="{{ path('app_profile_id', { 'id': user.id }) }}" title="creation utilisateur">Voir le profil</a></li>
-                            <li><a href="{{ path('admin_user_view_delete', { 'id': user.id }) }}" class="deleteProfil" title="Supprimer le profil">Supprimer le profil</a></li>
+                            <li><a href="{{ path('app_profile_id', { 'id': user.id }) }}" title="Voir le profil">Voir le profil</a></li>
+                            {% if user in userAdmin %}
+                                <li class="adminNotDelete">Utilisateur admin</li>
+                            {% else %}
+                                <li><a href="{{ path('admin_user_view_delete', { 'id': user.id }) }}" class="deleteProfil" title="Supprimer le profil">Supprimer le profil</a></li>
+                            {% endif %}
                         </ul>
                     </td>
                     {% endif %}
