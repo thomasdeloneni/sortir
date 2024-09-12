@@ -32,6 +32,7 @@
             <p>Participant : {{ app.user.nom }} {{ app.user.prenom }}<p>
         </div>
         <div class="filter-form" >
+            {{ form_start(form) }}
             <div class="filter-grid">
                 <div class="filter-group">
                     {{ form_label(form.campus) }}
