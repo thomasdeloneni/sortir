@@ -3,7 +3,12 @@
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
 }
+
 .tableau {
     display: block;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
@@ -11,18 +16,19 @@
     border-radius: 8px;
     margin-bottom: 20px;
     margin-top: 20px;
+    width: 100%;
+    overflow-x: auto;
 }
-
 
 .infos {
     margin-left: auto;
     margin-top: 1rem;
+    text-align: right;
 }
 
 .filter-form {
     width: 100%;
-    max-width: 1200px;
-    margin: 20px auto;
+    margin: 20px 0;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
@@ -40,22 +46,84 @@
     flex-direction: column;
 }
 
+.filter-input, .checkbox-group {
+    width: 100%;
+}
+
+button {
+    color: #ffce00;
+    background-color: #180344;
+    padding: 0.5rem 1.5rem;
+    text-decoration: none;
+    margin-right: 1rem;
+    border-radius: 10px;
+    width: auto;
+    min-width: 200px;
+}
+
+/* Responsive styles */
+@media (max-width: 1200px) {
+    .filter-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .filter-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .infos {
+        text-align: center;
+        margin-right: 0;
+    }
+
+    button {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
+
+    .tableau {
+        font-size: 14px;
+    }
+
+    .tableau th, .tableau td {
+        padding: 8px 4px;
+    }
+
+    .btnAction a {
+        padding: 0.2rem 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+
+    .filter-form {
+        padding: 10px;
+    }
+
+    .tableau {
+        font-size: 12px;
+    }
+
+    .tableau th, .tableau td {
+        padding: 6px 2px;
+    }
+
+    .btnAction a {
+        padding: 0.2rem 0.3rem;
+        font-size: 12px;
+    }
+}
+
+/* Autres styles inchangés */
 .filter-group label {
     margin-bottom: 5px;
     font-weight: bold;
-}
-
-.filter-input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ced4da;
-    border-radius: 4px;
-    font-size: 14px;
-}
-
-.checkbox-group {
-    flex-direction: row;
-    align-items: center;
 }
 
 .checkbox-group input[type="checkbox"] {
@@ -67,36 +135,16 @@
     text-align: right;
 }
 
-button {
-    color: #ffce00;
-    background-color: #180344;
-    padding: 0.2rem 1.5rem;
-    text-decoration: none;
-    margin-right: 1rem;
-    border-radius: 10px;
-    width: 200px;
-}
-
 button:hover {
     color: #180344;
     background-color: #ffce00;
-}
-
-@media (max-width: 1200px) {
-    .filter-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-.infos {
-    margin-right: 20px;
 }
 
 .btnAction a{
     text-decoration: none;
     font-weight: bold;
     color: #d388ee;
-    padding : 0.2rem 1.5rem;
+    padding: 0.2rem 1.5rem;
     margin-top: 3px;
 }
 
@@ -135,26 +183,24 @@ button:hover {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.alert-success {
+.alert-success, .alert-danger {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffce00;
-    color: #180344;
     padding: 0.5rem 1rem;
     border-radius: 10px;
     margin-top: 1rem;
+    width: 100%;
+}
+
+.alert-success {
+    background-color: #ffce00;
+    color: #180344;
 }
 
 .alert-danger {
-    display: flex;
-    justify-content: center;
-    align-items: center;
     background-color: #ff0000;
     color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 10px;
-    margin-top: 1rem;
 }
 
 .action-columns {
@@ -162,12 +208,3 @@ button:hover {
     flex-direction: row;
     gap: 0.5rem;
 }
-
-
-
-
-
-
-
-
-
