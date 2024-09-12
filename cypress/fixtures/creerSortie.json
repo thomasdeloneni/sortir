@@ -1,0 +1,9 @@
+{
+  "nom": "Disneyland",
+
+    "dateHeureDebut": "2024-12-31T10:00",
+    "dateLimiteInscription": "2024-12-30T10:00",
+    "nbInscriptionsMax": 10,
+    "duree": 80,
+    "descriptionInfos": "Sortie à Disneyland Paris"
+}

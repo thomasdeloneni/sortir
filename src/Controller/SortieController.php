@@ -20,13 +20,17 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 final class SortieController extends AbstractController
 {
 
-    #[Route('/new', name: 'app_sortie_new')]
+    #[Route('/', name: 'app_sortie_new')]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $sortie = new Sortie();
         $form = $this->createForm(SortieType::class, $sortie);
         $form->handleRequest($request);
         $userEnCours = $this->getUser();
+
+        if (!$userEnCours instanceof Participant) {
+            throw new \LogicException('User n\'est pas un participant');
+        }
 
         if ($form->isSubmitted()) {
             if ($form->isValid()) {
@@ -75,6 +79,7 @@ final class SortieController extends AbstractController
     #[Route('/{id}/edit', name: 'app_sortie_edit')]
     public function edit(Request $request, Sortie $sortie, EntityManagerInterface $entityManager): Response
     {
+
         if (!$this->isGranted('edit', $sortie)) {
          return $this->redirectToRoute('app_main');
         }

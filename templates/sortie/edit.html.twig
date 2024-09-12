@@ -9,7 +9,7 @@
 
     <form method="post" action="{{ path('app_sortie_delete', {id: sortie.id}) }}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette sortie ?');">
         <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ sortie.id) }}">
-        <button class="btn btn-danger">Supprimer la sortie</button>
+        <button data-cy="supprimer-sortie" class="btn btn-danger">Supprimer la sortie</button>
     </form>
 
 {% endblock %}

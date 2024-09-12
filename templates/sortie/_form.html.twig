@@ -9,34 +9,34 @@
     <div class="columns">
         <div class="informations">
             {{ form_label(form.nom)}}
-            {{ form_widget(form.nom)}}
+            {{ form_widget(form.nom, {'attr': {'data-cy': 'creer-sortie-nom'}}) }}
             <br>
             {{ form_label(form.dateHeureDebut)}}
-            {{ form_widget(form.dateHeureDebut)}}
+            {{ form_widget(form.dateHeureDebut, {'attr': {'data-cy': 'creer-sortie-date'}}) }}
             <br>
             {{ form_label(form.dateLimiteInscription)}}
-            {{ form_widget(form.dateLimiteInscription)}}
+            {{ form_widget(form.dateLimiteInscription, {'attr': {'data-cy': 'creer-sortie-dateLimite'}}) }}
             {{ form_errors(form.dateLimiteInscription) }}
             <br>
             {{ form_label(form.nbInscriptionsMax)}}
-            {{ form_widget(form.nbInscriptionsMax)}}
+            {{ form_widget(form.nbInscriptionsMax, {'attr': {'data-cy': 'creer-sortie-nbInscriptionMax'}}) }}
             <br>
             {{ form_label(form.duree)}}
-            {{ form_widget(form.duree) }}
+            {{ form_widget(form.duree, {'attr': {'data-cy': 'creer-sortie-duree'}}) }}
             <br>
             {{ form_label(form.infosSortie)}}
-            {{ form_widget(form.infosSortie)}}
+            {{ form_widget(form.infosSortie, {'attr': {'data-cy': 'creer-sortie-description'}}) }}
             <br>
         </div>
         <div class="localisation">
             {{ form_label(form.campus)}}
-            {{ form_widget(form.campus) }}
+            {{ form_widget(form.campus, {'attr': {'data-cy': 'creer-sortie-campus'}}) }}
             <br>
             {{ form_label(form.ville)}}
-            {{ form_widget(form.ville) }}
+            {{ form_widget(form.ville, {'attr': {'data-cy': 'creer-sortie-ville'}}) }}
             <br>
             {{ form_label(form.lieu)}}
-            {{ form_widget(form.lieu) }}
+            {{ form_widget(form.lieu, {'attr': {'data-cy': 'creer-sortie-lieu'}}) }}
             <br>
 
             {# conteneur pour afficher les infos du lieu  par l'utilisateur #}

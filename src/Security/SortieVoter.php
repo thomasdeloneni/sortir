@@ -23,7 +23,7 @@ class SortieVoter extends Voter
     protected function supports(string $attribute, $subject): bool
     {
         // Only vote on Sortie objects inside this voter
-        if ($attribute !== self::INSCRIRE) {
+        if (!in_array($attribute, [self::EDIT, self::INSCRIRE, self::DESINSCRIRE])) {
             return false;
         }
 
@@ -81,6 +81,7 @@ class SortieVoter extends Voter
         if ($this->security->isGranted('ROLE_ADMIN')) {
             return true;
         }
+
         if ($sortie->getOrganisateur() === $user && $sortie->getEtat()->getLibelle() == "Créée") {
             return true;
         }

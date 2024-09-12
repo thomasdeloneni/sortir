@@ -39,6 +39,10 @@ header{
     color: #FFF;
 
 }
+header p {
+    font-size: 2rem;
+
+}
 
 header a,
 header a:focus,
