@@ -9,7 +9,7 @@
     <div class="columns">
         <div class="informations">
             {{ form_label(form.nom)}}
-            {{ form_widget(form.nom, {'attr': {'data-cy': 'creer-sortie-nom'}}) }}
+            {{ form_widget(form.nom)}}
             <br>
             {{ form_label(form.dateHeureDebut)}}
             {{ form_widget(form.dateHeureDebut, {'attr': {'data-cy': 'creer-sortie-date'}}) }}
@@ -88,7 +88,6 @@
             }
 
             const baseUrl = `${window.location.origin}/public/api/lieu/${lieuId}`;
-
             fetch(baseUrl)
                 .then(response => {
                     if (!response.ok) {
