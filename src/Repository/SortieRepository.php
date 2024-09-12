@@ -24,11 +24,8 @@ class SortieRepository extends ServiceEntityRepository
     public function findByFilters(SortieSearch $search)
     {
         $queryBuilder = $this->createQueryBuilder('s')
-            ->leftJoin('s.etat', 'e')->addSelect('e')
-            ->leftJoin('s.lieu', 'l')->addSelect('l')
-            ->leftJoin('s.organisateur', 'o')->addSelect('o')
             ->leftJoin('s.participant', 'p')->addSelect('p')
-            ->leftJoin('s.campus', 'c')->addSelect('c')
+            ->leftJoin('s.etat', 'e')->addSelect('e')
             ->where('e.libelle != :historisee')
             ->setParameter('historisee', 'Historisée');
 
