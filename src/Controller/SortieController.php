@@ -46,6 +46,10 @@ final class SortieController extends AbstractController
                 }
                 $sortie->setOrganisateur($userEnCours);
 
+                if (!$sortie->getParticipant()->contains($userEnCours)) {
+                    $sortie->addParticipant($userEnCours);
+                }
+
                 $entityManager->persist($sortie);
                 $entityManager->flush();
                 return $this->redirectToRoute('app_main');
