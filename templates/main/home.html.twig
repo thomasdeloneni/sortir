@@ -113,9 +113,12 @@
                             {% endif %}
                             <td data-cy="modifier-sortie" class="btnAction">
 
-                                    {% if (sortie.organisateur == app.user or app.user.pseudo == "admin" and sortie.etat.libelle == "Créée") %}
+                                    {% if ((sortie.organisateur == app.user or app.user.pseudo == "admin") and sortie.etat.libelle == "Créée") %}
                                         <a href="{{ path('app_sortie_edit', {'id': sortie.id}) }}">Modifier</a>
                                     {% endif %}
+                                {% if sortie.etat.libelle == "Ouverte" and (sortie.organisateur == app.user or app.user.pseudo == "admin") %}
+                                    <a href="{{ path('app_sortie_cancel', {'id': sortie.id}) }}">Annuler</a>
+                                {% endif %}
                                 </td>
                             <td  class="btnAction">
                                     {% if app.user %}
